@@ -24,6 +24,7 @@ import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.HashSet
 
@@ -211,7 +212,10 @@ class ScannerFragment : Fragment() {
                     beacon.uuid = iBeaconUUID
                     beacon.major = major
                     beacon.minor = minor
-                    Log.e("DINKAR", "iBeaconUUID:$iBeaconUUID major:$major minor:$minor")
+                    val current = LocalDateTime.now()
+
+                    if (iBeaconUUID.equals("E2C56DB5DFFB48D2B060D0F5A71096E0"))
+                        Log.e("DINKAR", "$current iBeaconUUID:$iBeaconUUID major:$major minor:$minor")
                 }
             }
             beaconSet.add(beacon)
