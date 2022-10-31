@@ -56,7 +56,11 @@ class BeaconsAdapter(beacons: List<Beacon>) :
                     beaconListFiltered = beaconList
                 } else {
                     val filteredList: MutableList<Beacon> = ArrayList()
-                    for (beacon in beaconList) {
+                    // 这种写法有 An exception occured during performFiltering()!
+                    //    java.util.ConcurrentModificationException
+                    // 也就是遍历的时候，修改了beaconlist，需要处理
+                    // for (beacon in beaconList) {
+                    for (beacon in ArrayList(beaconList)) {
                         if (beacon.type == Utils.getBeaconFilterFromString(charString) || Utils.getBeaconFilterFromString(
                                 charString
                             ) == Beacon.beaconType.any
@@ -75,8 +79,10 @@ class BeaconsAdapter(beacons: List<Beacon>) :
                 charSequence: CharSequence?,
                 filterResults: FilterResults
             ) {
-                beaconListFiltered = filterResults.values as ArrayList<Beacon>
-                notifyDataSetChanged()
+                filterResults.values?.let {
+                    beaconListFiltered = filterResults.values as ArrayList<Beacon>
+                    notifyDataSetChanged()
+                }
             }
         }
     }

@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothManager
 import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
+import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -26,7 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.time.LocalDateTime
 import java.util.*
-import kotlin.collections.HashSet
+
 
 class ScannerFragment : Fragment() {
     private lateinit var startButton: Button
@@ -42,6 +43,9 @@ class ScannerFragment : Fragment() {
     var beaconSet: HashSet<Beacon> = HashSet()
     var beaconTypePositionSelected = 0
     var beaconAdapter: BeaconsAdapter? = null
+
+    private val measureFps = MeasureFps(6)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -103,7 +107,10 @@ class ScannerFragment : Fragment() {
     private fun onStartScannerButtonClick() {
         startButton.visibility = View.GONE
         stopButton.visibility = View.VISIBLE
-        btScanner!!.startScan(leScanCallback)
+        val bleScanSettings = ScanSettings.Builder().setScanMode(
+            ScanSettings.SCAN_MODE_LOW_LATENCY
+        ).build()
+        btScanner!!.startScan(null,bleScanSettings,leScanCallback)
     }
 
     private fun onStopScannerButtonClick() {
@@ -163,6 +170,7 @@ class ScannerFragment : Fragment() {
 
     private val leScanCallback: ScanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
+            measureFps.AddRecord(true);
             val scanRecord = result.scanRecord
             val beacon = Beacon(result.device.address)
             beacon.manufacturer = result.device.name
@@ -215,7 +223,7 @@ class ScannerFragment : Fragment() {
                     val current = LocalDateTime.now()
 
                     if (iBeaconUUID.equals("E2C56DB5DFFB48D2B060D0F5A71096E0"))
-                        Log.e("DINKAR", "$current iBeaconUUID:$iBeaconUUID major:$major minor:$minor")
+                        Log.e("DINKAR", "$current iBeaconUUID:$iBeaconUUID major:$major minor:$minor rssi:${result.rssi}")
                 }
             }
             beaconSet.add(beacon)
