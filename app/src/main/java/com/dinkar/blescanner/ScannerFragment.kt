@@ -11,23 +11,19 @@ import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.os.ParcelUuid
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
+import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.*
 
 
@@ -235,10 +231,15 @@ class ScannerFragment : Fragment() {
                     val date = Calendar.getInstance().time
                     val dateInString = date.toString("yyyy/MM/dd HH:mm:ss.SSS")
 
-                    //if (iBeaconUUID.equals("E2C56DB5DFFB48D2B060D0F5A71096E0"))
-                        Log.e("DINKAR", "${beaconSet.contains(beacon)} $dateInString UUID:$iBeaconUUID major:$major minor:$minor rssi:${result.rssi}")
+                    val wifiManager =
+                        context!!.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                    val numberOfLevels = 5
+                    val wifiInfo = wifiManager.connectionInfo
 
-                    logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor rssi:${result.rssi} \n"
+                    //if (iBeaconUUID.equals("E2C56DB5DFFB48D2B060D0F5A71096E0"))
+                        Log.e("DINKAR", "${beaconSet.contains(beacon)} $dateInString UUID:$iBeaconUUID major:$major minor:$minor rssi:${result.rssi} wifi:${wifiInfo.rssi}")
+
+                    logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor rssi:${result.rssi} wifi:${wifiInfo.rssi}\n"
                 }
             }
 //            if (beaconSet.contains(beacon)) {
@@ -266,7 +267,8 @@ class ScannerFragment : Fragment() {
                 beaconAdapter!!.filter.filter(Utils.ALL)
             }
             1 -> {
-                beaconAdapter!!.filter.filter(Utils.EDDYSTONE)
+                beaconAdapter!!.filter.filter(Utils.IBEACON)
+                // beaconAdapter!!.filter.filter(Utils.EDDYSTONE)
             }
             2 -> {
                 beaconAdapter!!.filter.filter(Utils.IBEACON)

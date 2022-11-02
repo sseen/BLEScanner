@@ -40,7 +40,7 @@ class BeaconsAdapter(beacons: List<Beacon>) :
                 filter.filter(Utils.ALL)
             }
             1 -> {
-                filter.filter(Utils.EDDYSTONE)
+                filter.filter(Utils.IBEACON)
             }
             2 -> {
                 filter.filter(Utils.IBEACON)
