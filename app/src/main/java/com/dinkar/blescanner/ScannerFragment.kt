@@ -21,10 +21,12 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
 
@@ -35,14 +37,17 @@ class ScannerFragment : Fragment() {
     private lateinit var spinner: Spinner
     private lateinit var recyclerView: RecyclerView
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var tvLog: EditText
 
     private var btManager: BluetoothManager? = null
     private var btAdapter: BluetoothAdapter? = null
     private var btScanner: BluetoothLeScanner? = null
     val eddystoneServiceId: ParcelUuid = ParcelUuid.fromString("0000FEAA-0000-1000-8000-00805F9B34FB")
     var beaconSet: HashSet<Beacon> = HashSet()
+    var beaconList: MutableList<Beacon> = mutableListOf()
     var beaconTypePositionSelected = 0
     var beaconAdapter: BeaconsAdapter? = null
+    var logContent: String = ""
 
     private val measureFps = MeasureFps(6)
 
@@ -66,13 +71,17 @@ class ScannerFragment : Fragment() {
         stopButton = view.findViewById(R.id.stopButton)
         spinner = view.findViewById(R.id.spinner)
         recyclerView = view.findViewById(R.id.recyclerView)
+        tvLog = view.findViewById(R.id.log_edit_text)
+
         startButton.setOnClickListener { onStartScannerButtonClick() }
         stopButton.setOnClickListener { onStopScannerButtonClick() }
         linearLayoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = linearLayoutManager
-        beaconAdapter = BeaconsAdapter(beaconSet.toList())
+
+        beaconAdapter = BeaconsAdapter(beaconList)//beaconSet.toList())
         recyclerView.adapter = beaconAdapter
-        beaconAdapter!!.filter.filter(Utils.ALL)
+
+        beaconAdapter!!.filter.filter(Utils.IBEACON)
         spinner.onItemSelectedListener = (object : OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -108,12 +117,13 @@ class ScannerFragment : Fragment() {
         startButton.visibility = View.GONE
         stopButton.visibility = View.VISIBLE
         val bleScanSettings = ScanSettings.Builder().setScanMode(
-            ScanSettings.SCAN_MODE_LOW_LATENCY
+            ScanSettings.SCAN_MODE_LOW_POWER
         ).build()
         btScanner!!.startScan(null,bleScanSettings,leScanCallback)
     }
 
     private fun onStopScannerButtonClick() {
+        tvLog.setText(logContent)
         stopButton.visibility = View.GONE
         startButton.visibility = View.VISIBLE
         btScanner!!.stopScan(leScanCallback)
@@ -170,7 +180,9 @@ class ScannerFragment : Fragment() {
 
     private val leScanCallback: ScanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
-            measureFps.AddRecord(true);
+
+            // measureFps.AddRecord(true);
+
             val scanRecord = result.scanRecord
             val beacon = Beacon(result.device.address)
             beacon.manufacturer = result.device.name
@@ -220,14 +232,27 @@ class ScannerFragment : Fragment() {
                     beacon.uuid = iBeaconUUID
                     beacon.major = major
                     beacon.minor = minor
-                    val current = LocalDateTime.now()
+                    val date = Calendar.getInstance().time
+                    val dateInString = date.toString("yyyy/MM/dd HH:mm:ss.SSS")
 
-                    if (iBeaconUUID.equals("E2C56DB5DFFB48D2B060D0F5A71096E0"))
-                        Log.e("DINKAR", "$current iBeaconUUID:$iBeaconUUID major:$major minor:$minor rssi:${result.rssi}")
+                    //if (iBeaconUUID.equals("E2C56DB5DFFB48D2B060D0F5A71096E0"))
+                        Log.e("DINKAR", "${beaconSet.contains(beacon)} $dateInString UUID:$iBeaconUUID major:$major minor:$minor rssi:${result.rssi}")
+
+                    logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor rssi:${result.rssi} \n"
                 }
             }
+//            if (beaconSet.contains(beacon)) {
+//                beaconSet.remove(beacon);
+//                beaconSet.add(beacon);
+//            }
             beaconSet.add(beacon)
-            (recyclerView.adapter as BeaconsAdapter).updateData(beaconSet.toList(),beaconTypePositionSelected)
+            beaconList.add(beacon)
+            (recyclerView.adapter as BeaconsAdapter).updateData(beaconList,beaconTypePositionSelected)
+        }
+
+        fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
+            val formatter = SimpleDateFormat(format, locale)
+            return formatter.format(this)
         }
 
         override fun onScanFailed(errorCode: Int) {
