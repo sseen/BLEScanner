@@ -115,8 +115,48 @@ class ScannerFragment : Fragment() {
             }
         }
 
+        // rssi变化监听
         activity?.registerReceiver(myRssiChangeReceiver, IntentFilter(WifiManager.RSSI_CHANGED_ACTION))
+
+        // wifi扫描结果监听
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+        context!!.registerReceiver(wifiScanReceiver, intentFilter)
+
+        startScanWifis()
     }
+
+    private fun scanSuccess() {
+        //val results = wifiManager.scanResults
+        startScanWifis()
+    }
+
+    private fun scanFailure() {
+        // handle failure: new scan did NOT succeed
+        // consider using old scan results: these are the OLD results!
+        //val results = wifiManager.scanResults
+        startScanWifis()
+    }
+
+    private fun startScanWifis() {
+        val wifiManager = context?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        wifiManager.startScan()
+    }
+
+    val wifiScanReceiver = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+            val success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
+            if (success) {
+                val wifiManager = context?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                Log.e("wifi scan","${wifiManager.scanResults.first().level}")
+                scanSuccess()
+            } else {
+                scanFailure()
+            }
+        }
+    }
+
 
     private val myRssiChangeReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(arg0: Context, arg1: Intent) {
