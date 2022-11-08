@@ -1,5 +1,6 @@
 package com.dinkar.blescanner
 
+import android.graphics.drawable.Icon
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+
 
 
 class BeaconsAdapter(beacons: List<Beacon>) :
@@ -123,12 +125,13 @@ class BeaconsAdapter(beacons: List<Beacon>) :
                 namespaceUUID?.visibility = View.VISIBLE
             } else if (beacon.type == Beacon.beaconType.eddystoneUID) {
                 namespaceUUID?.text =
-                    String.format(context.getString(R.string.namespace), beacon.namespace)
+                    String.format(context.getString(R.string.namespace), beacon.uuid)
                 instanceMajorMinor?.text = String.format(
                     context.getString(R.string.instance),
                     beacon.instance
                 )
-                image?.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.eddystone))
+                image?.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.wifi))
+                mac?.visibility  = View.GONE
                 instanceMajorMinor?.visibility = View.VISIBLE
                 namespaceUUID?.visibility = View.VISIBLE
             } else {

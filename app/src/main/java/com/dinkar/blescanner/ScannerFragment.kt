@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.log
 
 
 class ScannerFragment : Fragment() {
@@ -88,6 +89,7 @@ class ScannerFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
+                tvLog.setText("")
                 logContent = ""
                 beaconList.clear()
                 beaconTypePositionSelected = position
@@ -252,30 +254,34 @@ class ScannerFragment : Fragment() {
                     val dateInString = date.toString("yyyy/MM/dd HH:mm:ss.SSS")
 
                     // if (iBeaconUUID.equals("E2C56DB5DFFB48D2B060D0F5A71096E0"))
-                    //     Log.e("DINKAR", "${beaconSet.contains(beacon)} $dateInString UUID:$iBeaconUUID major:$major minor:$minor rssi:${result.rssi} wifi:${wifiInfo.rssi}")
+                    //     Log.e("DINKAR", "${beaconSet.contains(beacon)} $dateInString UUID:$iBeaconUUID major:$major minor:$minor RSSI:${result.rssi} wifi:${wifiInfo.rssi}")
 
-                    //logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor rssi:${result.rssi}\n"
+                    //logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor RSSI:${result.rssi}\n"
 
                     when (beaconTypePositionSelected) {
                         0 -> {
-                            logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor rssi:${result.rssi}\n$dateInString Wifi ssid:${wifiInfo.ssid} bssid:${wifiInfo.ssid} rssi:${wifiRssi}\n"
+                            logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor RSSI:${result.rssi}\n$dateInString Wifi SSID:${wifiInfo.ssid} BSSID:${wifiInfo.ssid} RSSI:${wifiRssi}\n"
+                            beaconSet.add(beacon)
                             beaconList.add(beacon)
                         }
                         1 -> {
-                            logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor rssi:${result.rssi}\n"
+                            logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor RSSI:${result.rssi}\n"
+                            beaconSet.add(beacon)
                             beaconList.add(beacon)
                         }
                         else -> {
-                            logContent += "$dateInString Wifi ssid:${wifiInfo.ssid} bssid:${wifiInfo.bssid} rssi:${wifiInfo.rssi}\n"
+                            logContent += "$dateInString Wifi SSID:${wifiInfo.ssid} BSSID:${wifiInfo.bssid} RSSI:${wifiInfo.rssi}\n"
                             beacon.uuid = wifiInfo.ssid
                             beacon.type = Beacon.beaconType.eddystoneUID
-                            beacon.rssi = wifiRssi
+                            beacon.rssi = wifiInfo.rssi
+                            Log.v("wifi","beacon ${beacon.rssi}")
+                            beaconSet.add(beacon)
                             beaconList.add(beacon)
                         }
                     }
                 }
             }
-            beaconSet.add(beacon)
+
             (recyclerView.adapter as BeaconsAdapter).updateData(beaconList,beaconTypePositionSelected)
         }
 
