@@ -130,7 +130,7 @@ class BeaconsAdapter(beacons: List<Beacon>) :
                     context.getString(R.string.instance),
                     beacon.instance
                 )
-                image?.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.wifi))
+                image?.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.baseline_wifi_black_24dp))
                 mac?.visibility  = View.GONE
                 instanceMajorMinor?.visibility = View.VISIBLE
                 namespaceUUID?.visibility = View.VISIBLE
