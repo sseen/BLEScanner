@@ -3,6 +3,7 @@ package com.dinkar.blescanner
 object Utils {
     val ALL = "all"
     val EDDYSTONE = "addystone"
+    val WIFI = "wifi"
     val IBEACON = "iBeacon"
     private val HEX = "0123456789ABCDEF".toCharArray()
     fun toHexString(bytes: ByteArray): String {

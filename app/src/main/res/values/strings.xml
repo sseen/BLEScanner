@@ -10,7 +10,7 @@
     <string name="major_minor">Major: %1$s Minor: %2$s</string>
     <string-array name="BLE_Scanner_Type">
         <item>All</item>
-<!--        <item>iBeacon</item>-->
         <item>iBeacon</item>
+        <item>Wifi</item>
     </string-array>
 </resources>

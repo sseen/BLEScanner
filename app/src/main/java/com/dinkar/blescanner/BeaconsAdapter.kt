@@ -43,7 +43,7 @@ class BeaconsAdapter(beacons: List<Beacon>) :
                 filter.filter(Utils.IBEACON)
             }
             2 -> {
-                filter.filter(Utils.IBEACON)
+                filter.filter(Utils.EDDYSTONE)
             }
         }
     }
@@ -61,11 +61,13 @@ class BeaconsAdapter(beacons: List<Beacon>) :
                     // 也就是遍历的时候，修改了beaconlist，需要处理
                     // for (beacon in beaconList) {
                     for (beacon in ArrayList(beaconList)) {
-                        if (beacon.type == Utils.getBeaconFilterFromString(charString) || Utils.getBeaconFilterFromString(
-                                charString
-                            ) == Beacon.beaconType.any
-                        ) {
-                            filteredList.add(beacon)
+                        beacon?.let {
+                            if (beacon.type == Utils.getBeaconFilterFromString(charString) || Utils.getBeaconFilterFromString(
+                                    charString
+                                ) == Beacon.beaconType.any
+                            ) {
+                                filteredList.add(beacon)
+                            }
                         }
                     }
                     beaconListFiltered = filteredList

@@ -8,8 +8,10 @@ import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
@@ -44,6 +46,7 @@ class ScannerFragment : Fragment() {
     var beaconTypePositionSelected = 0
     var beaconAdapter: BeaconsAdapter? = null
     var logContent: String = ""
+    var wifiRssi = 0
 
     private val measureFps = MeasureFps(6)
 
@@ -85,6 +88,8 @@ class ScannerFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
+                logContent = ""
+                beaconList.clear()
                 beaconTypePositionSelected = position
                 setBeaconFilter(position)
 
@@ -106,6 +111,16 @@ class ScannerFragment : Fragment() {
                 // Apply the adapter to the spinner
                 spinner.adapter = adapter
             }
+        }
+
+        activity?.registerReceiver(myRssiChangeReceiver, IntentFilter(WifiManager.RSSI_CHANGED_ACTION))
+    }
+
+    private val myRssiChangeReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(arg0: Context, arg1: Intent) {
+            val wifiMan = context!!.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            val newRssi = wifiMan.connectionInfo.rssi
+            wifiRssi = newRssi
         }
     }
 
@@ -179,6 +194,11 @@ class ScannerFragment : Fragment() {
 
             // measureFps.AddRecord(true);
 
+            val wifiManager =
+                context!!.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            val numberOfLevels = 5
+            val wifiInfo = wifiManager.connectionInfo
+
             val scanRecord = result.scanRecord
             val beacon = Beacon(result.device.address)
             beacon.manufacturer = result.device.name
@@ -231,23 +251,31 @@ class ScannerFragment : Fragment() {
                     val date = Calendar.getInstance().time
                     val dateInString = date.toString("yyyy/MM/dd HH:mm:ss.SSS")
 
-                    val wifiManager =
-                        context!!.getSystemService(Context.WIFI_SERVICE) as WifiManager
-                    val numberOfLevels = 5
-                    val wifiInfo = wifiManager.connectionInfo
+                    // if (iBeaconUUID.equals("E2C56DB5DFFB48D2B060D0F5A71096E0"))
+                    //     Log.e("DINKAR", "${beaconSet.contains(beacon)} $dateInString UUID:$iBeaconUUID major:$major minor:$minor rssi:${result.rssi} wifi:${wifiInfo.rssi}")
 
-                    //if (iBeaconUUID.equals("E2C56DB5DFFB48D2B060D0F5A71096E0"))
-                        Log.e("DINKAR", "${beaconSet.contains(beacon)} $dateInString UUID:$iBeaconUUID major:$major minor:$minor rssi:${result.rssi} wifi:${wifiInfo.rssi}")
+                    //logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor rssi:${result.rssi}\n"
 
-                    logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor rssi:${result.rssi} wifi:${wifiInfo.rssi}\n"
+                    when (beaconTypePositionSelected) {
+                        0 -> {
+                            logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor rssi:${result.rssi}\n$dateInString Wifi ssid:${wifiInfo.ssid} bssid:${wifiInfo.ssid} rssi:${wifiRssi}\n"
+                            beaconList.add(beacon)
+                        }
+                        1 -> {
+                            logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor rssi:${result.rssi}\n"
+                            beaconList.add(beacon)
+                        }
+                        else -> {
+                            logContent += "$dateInString Wifi ssid:${wifiInfo.ssid} bssid:${wifiInfo.bssid} rssi:${wifiInfo.rssi}\n"
+                            beacon.uuid = wifiInfo.ssid
+                            beacon.type = Beacon.beaconType.eddystoneUID
+                            beacon.rssi = wifiRssi
+                            beaconList.add(beacon)
+                        }
+                    }
                 }
             }
-//            if (beaconSet.contains(beacon)) {
-//                beaconSet.remove(beacon);
-//                beaconSet.add(beacon);
-//            }
             beaconSet.add(beacon)
-            beaconList.add(beacon)
             (recyclerView.adapter as BeaconsAdapter).updateData(beaconList,beaconTypePositionSelected)
         }
 
@@ -268,10 +296,9 @@ class ScannerFragment : Fragment() {
             }
             1 -> {
                 beaconAdapter!!.filter.filter(Utils.IBEACON)
-                // beaconAdapter!!.filter.filter(Utils.EDDYSTONE)
             }
             2 -> {
-                beaconAdapter!!.filter.filter(Utils.IBEACON)
+                beaconAdapter!!.filter.filter(Utils.EDDYSTONE)
             }
         }
     }
