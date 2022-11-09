@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:orientation="vertical"
+    app:dividerDrawable="@drawable/divider"
+    app:flexDirection="column"
+    app:justifyContent="center"
+    app:showDivider="middle"
+    tools:context=".ui.main.HomeActivity">
+
+    <Button
+        android:id="@+id/home_bt_beacon"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#81C784"
+        android:text="@string/home_bt_beacon"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/home_bt_wifi"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#64B5F6"
+        android:text="@string/home_bt_wifi"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/home_bt_location"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#FFAB91"
+        android:text="@string/home_bt_location"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/home_bt_data"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#9FA8DA"
+        android:text="@string/home_bt_data"
+        android:textSize="20sp" />
+</com.google.android.flexbox.FlexboxLayout>
