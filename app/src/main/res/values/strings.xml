@@ -19,4 +19,8 @@
     <string name="home_bt_location">area setting</string>
     <string name="home_bt_data">data collect</string>
 
+    <string name="beacon_device_name">beacon_device_name</string>
+    <string name="beacon_user_name">beacon_user_name</string>
+    <string name="beacon_other_name">beacon_other_name</string>
+
 </resources>
