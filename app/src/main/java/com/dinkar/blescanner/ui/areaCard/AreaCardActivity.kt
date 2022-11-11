@@ -2,16 +2,21 @@ package com.dinkar.blescanner.ui.areaCard
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dinkar.blescanner.BaseDetailActivity
 import com.dinkar.blescanner.R
+import es.dmoral.toasty.Toasty
 
 class AreaCardActivity : BaseDetailActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_area_card)
+        setTitle(R.string.home_bt_location)
 
         val courseRV = findViewById<RecyclerView>(R.id.idRVArea)
 
@@ -31,5 +36,24 @@ class AreaCardActivity : BaseDetailActivity() {
         // in below two lines we are setting layoutmanager and adapter to our recycler view.
         courseRV.layoutManager = linearLayoutManager
         courseRV.adapter = courseAdapter
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.menu, menu)
+
+        menu?.findItem(R.id.save_item)?.setIcon(R.drawable.baseline_add_circle_white_24dp)
+
+        return true
+    }
+
+
+    override fun othersOnOptionsItemSelected(item: MenuItem) {
+        super.othersOnOptionsItemSelected(item)
+        if (item.itemId == R.id.save_item) {
+            Toasty.success(applicationContext, "Success!", Toast.LENGTH_SHORT, true).show();
+
+            finish()
+        }
     }
 }
