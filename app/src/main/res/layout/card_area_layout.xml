@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:layout_weight="1"
+            android:paddingLeft="50dp"
             android:text="@string/area_title"
             android:textAlignment="center"
             android:textColor="@color/black"

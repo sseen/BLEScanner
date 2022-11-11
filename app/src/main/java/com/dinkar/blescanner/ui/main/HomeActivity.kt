@@ -6,16 +6,21 @@ import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.dinkar.blescanner.R
-import com.dinkar.blescanner.ui.area.AreaActivity
 import com.dinkar.blescanner.ui.areaCard.AreaCardActivity
 import com.dinkar.blescanner.ui.beacon.BeaconActivity
 import com.dinkar.blescanner.ui.wifi.ListWifiActivity
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
 
 
 class HomeActivity : AppCompatActivity(),View.OnClickListener {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        Logger.addLogAdapter(AndroidLogAdapter())
+
 
         val button1: Button = findViewById<View>(R.id.home_bt_beacon) as Button
         val button2: Button = findViewById<View>(R.id.home_bt_wifi) as Button
@@ -25,6 +30,21 @@ class HomeActivity : AppCompatActivity(),View.OnClickListener {
         button2.setOnClickListener(this)
         button3.setOnClickListener(this)
         button4.setOnClickListener(this)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Logger.d("start home")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Logger.d("resume home")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Logger.d("pause home")
     }
 
     override fun onClick(p0: View?) {
