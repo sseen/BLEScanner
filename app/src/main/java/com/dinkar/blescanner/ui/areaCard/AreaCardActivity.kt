@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.dinkar.blescanner.BaseDetailActivity
 import com.dinkar.blescanner.R
 
-class AreaCardActivity : AppCompatActivity() {
+class AreaCardActivity : BaseDetailActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_area_card)
@@ -29,6 +31,5 @@ class AreaCardActivity : AppCompatActivity() {
         // in below two lines we are setting layoutmanager and adapter to our recycler view.
         courseRV.layoutManager = linearLayoutManager
         courseRV.adapter = courseAdapter
-
     }
 }

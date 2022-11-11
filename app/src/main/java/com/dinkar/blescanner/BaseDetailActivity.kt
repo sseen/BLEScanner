@@ -22,6 +22,11 @@ open class BaseDetailActivity : AppCompatActivity() {
                 return true
             }
         }
+        othersOnOptionsItemSelected(item)
         return super.onOptionsItemSelected(item)
+    }
+
+    open fun othersOnOptionsItemSelected(item: MenuItem) {
+
     }
 }
