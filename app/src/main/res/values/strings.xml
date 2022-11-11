@@ -23,4 +23,6 @@
     <string name="beacon_user_name">beacon_user_name</string>
     <string name="beacon_other_name">beacon_other_name</string>
 
+    <string name="button_save">Save</string>
+
 </resources>

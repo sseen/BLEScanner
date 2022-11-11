@@ -3,26 +3,15 @@ package com.dinkar.blescanner.ui.beacon
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import com.dinkar.blescanner.BaseDetailActivity
 import com.dinkar.blescanner.R
+import kotlinx.android.synthetic.main.activity_home.*
 
-class BeaconActivity : AppCompatActivity() {
+class BeaconActivity : BaseDetailActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_beacon)
-
-        var actionBar = supportActionBar
-        actionBar?.let {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-        }
+        setTitle(R.string.home_bt_beacon)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
 }

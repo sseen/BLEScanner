@@ -50,10 +50,10 @@
 
     <Button
         android:id="@+id/beacon_bt_done"
-        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_marginTop="30dp"
         android:background="@color/home_beacon"
-        android:text="@string/home_bt_data"
+        android:text="@string/button_save"
         android:textSize="20sp" />
 </com.google.android.flexbox.FlexboxLayout>
