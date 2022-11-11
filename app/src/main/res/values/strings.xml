@@ -25,4 +25,7 @@
 
     <string name="button_save">Save</string>
 
+    <string name="course_name">course_name</string>
+    <string name="course_rating">course_rating</string>
+
 </resources>
