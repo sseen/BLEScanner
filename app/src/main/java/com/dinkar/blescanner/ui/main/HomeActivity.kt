@@ -7,6 +7,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.dinkar.blescanner.R
 import com.dinkar.blescanner.ui.area.AreaActivity
+import com.dinkar.blescanner.ui.areaCard.AreaCardActivity
 import com.dinkar.blescanner.ui.beacon.BeaconActivity
 import com.dinkar.blescanner.ui.wifi.ListWifiActivity
 
@@ -37,7 +38,8 @@ class HomeActivity : AppCompatActivity(),View.OnClickListener {
                 startActivity(intent1)
             }
             R.id.home_bt_location -> {
-                val intent1 = Intent(this, AreaActivity::class.java)
+                // val intent1 = Intent(this, AreaActivity::class.java)
+                val intent1 = Intent(this, AreaCardActivity::class.java)
                 startActivity(intent1)
             }
             else -> {}
