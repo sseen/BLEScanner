@@ -15,9 +15,9 @@
     </string-array>
 
     <string name="home_bt_beacon">User setting</string>
-    <string name="home_bt_wifi">wifi setting</string>
-    <string name="home_bt_location">area setting</string>
-    <string name="home_bt_data">data collect</string>
+    <string name="home_bt_wifi">WiFi Setting</string>
+    <string name="home_bt_location">Training Data Setting</string>
+    <string name="home_bt_data">Test Data Collect</string>
 
     <string name="beacon_device_name">beacon_device_name</string>
     <string name="beacon_user_name">beacon_user_name</string>
