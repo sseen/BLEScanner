@@ -20,6 +20,9 @@ import es.dmoral.toasty.Toasty
 
 class AreaCardActivity : BaseDetailActivity() {
 
+    // Here, we have created new array list and added data to it
+    val courseModelArrayList: ArrayList<CourseModel> = ArrayList<CourseModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_area_card)
@@ -27,8 +30,6 @@ class AreaCardActivity : BaseDetailActivity() {
 
         val courseRV = findViewById<RecyclerView>(R.id.idRVArea)
 
-        // Here, we have created new array list and added data to it
-        val courseModelArrayList: ArrayList<CourseModel> = ArrayList<CourseModel>()
         courseModelArrayList.add(CourseModel("living room 1", 4, 1))
         courseModelArrayList.add(CourseModel("bed room 2", 3, 1))
         courseModelArrayList.add(CourseModel("kitchen 3", 4, 1))
@@ -53,15 +54,12 @@ class AreaCardActivity : BaseDetailActivity() {
                     popupMenu.menuInflater.inflate(R.menu.delete, popupMenu.menu)
 
                     //弹出式菜单的菜单项点击事件
-                    popupMenu.setOnMenuItemClickListener(object :
-                        PopupMenu.OnMenuItemClickListener {
-                        override fun onMenuItemClick(item: MenuItem): Boolean {
-//                            if (item.itemId == R.id.delete) {
-//                                chatData.remove(pos)
-//                                chatAdapter.notifyItemRemoved(pos)
-//                            }
-                            return false
+                    popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
+                        if (item.itemId == R.id.idItem_delete) {
+                            courseModelArrayList.removeAt(pos)
+                            courseAdapter.notifyItemRemoved(pos)
                         }
+                        false
                     })
 
                     var one = popupMenu::class.java.getDeclaredField("mPopup")
