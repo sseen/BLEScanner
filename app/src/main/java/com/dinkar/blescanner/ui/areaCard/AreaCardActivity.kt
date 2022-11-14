@@ -1,5 +1,6 @@
 package com.dinkar.blescanner.ui.areaCard
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dinkar.blescanner.BaseDetailActivity
 import com.dinkar.blescanner.R
+import com.dinkar.blescanner.ui.areaCard.detail.AreaDetailActivity
+import com.dinkar.blescanner.ui.beacon.BeaconActivity
 import es.dmoral.toasty.Toasty
 
 class AreaCardActivity : BaseDetailActivity() {
@@ -51,6 +54,9 @@ class AreaCardActivity : BaseDetailActivity() {
     override fun othersOnOptionsItemSelected(item: MenuItem) {
         super.othersOnOptionsItemSelected(item)
         if (item.itemId == R.id.save_item) {
+            val intent1 = Intent(this, AreaDetailActivity::class.java)
+            startActivity(intent1)
+        } else {
             Toasty.success(applicationContext, "Success!", Toast.LENGTH_SHORT, true).show();
 
             finish()

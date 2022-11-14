@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:paddingTop="40dp"
+    android:orientation="vertical"
+    app:dividerDrawable="@drawable/divider"
+    app:flexDirection="column"
+    app:justifyContent="flex_start"
+    app:showDivider="middle"
+    tools:context=".ui.beacon.BeaconActivity">
+
+    <EditText
+        android:id="@+id/beacon_device_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:text="@string/area_detail_title"
+        tools:layout_editor_absoluteX="106dp"
+        tools:layout_editor_absoluteY="68dp" />
+
+
+    <Button
+        android:id="@+id/beacon_bt_done"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/home_beacon"
+        android:text="@string/button_save"
+        android:textSize="20sp" />
+</com.google.android.flexbox.FlexboxLayout>

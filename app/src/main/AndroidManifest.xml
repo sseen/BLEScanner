@@ -24,6 +24,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ui.areaCard.detail.AreaDetailActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ui.areaCard.AreaCardActivity"
             android:exported="false">
             <meta-data

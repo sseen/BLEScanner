@@ -24,6 +24,7 @@
     <string name="beacon_other_name">beacon_other_name</string>
 
     <string name="area_title">area title</string>
+    <string name="area_detail_title">area detail title</string>
 
     <string name="button_save">Save</string>
     <string name="button_done">Done</string>
