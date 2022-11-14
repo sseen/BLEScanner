@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.dinkar.blescanner.R
 import com.dinkar.blescanner.ui.areaCard.AreaCardActivity
 import com.dinkar.blescanner.ui.beacon.BeaconActivity
+import com.dinkar.blescanner.ui.dataCollect.DataColloctActivity
 import com.dinkar.blescanner.ui.wifi.ListWifiActivity
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -62,7 +63,10 @@ class HomeActivity : AppCompatActivity(),View.OnClickListener {
                 val intent1 = Intent(this, AreaCardActivity::class.java)
                 startActivity(intent1)
             }
-            else -> {}
+            else -> {
+                val intent1 = Intent(this, DataColloctActivity::class.java)
+                startActivity(intent1)
+            }
         }
     }
 }

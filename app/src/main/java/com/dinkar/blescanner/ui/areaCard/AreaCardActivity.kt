@@ -18,7 +18,7 @@ import com.dinkar.blescanner.ui.areaCard.detail.AreaDetailActivity
 import es.dmoral.toasty.Toasty
 
 
-class AreaCardActivity : BaseDetailActivity() {
+open class AreaCardActivity : BaseDetailActivity() {
 
     // Here, we have created new array list and added data to it
     val courseModelArrayList: ArrayList<CourseModel> = ArrayList<CourseModel>()
