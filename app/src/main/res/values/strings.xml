@@ -14,7 +14,7 @@
         <item>Wifi</item>
     </string-array>
 
-    <string name="home_bt_beacon">beacon setting</string>
+    <string name="home_bt_beacon">User setting</string>
     <string name="home_bt_wifi">wifi setting</string>
     <string name="home_bt_location">area setting</string>
     <string name="home_bt_data">data collect</string>

@@ -6,22 +6,55 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dinkar.blescanner.BaseDetailActivity
 import com.dinkar.blescanner.R
-import com.dinkar.blescanner.ui.areaCard.detail.AreaDetailActivity
 import es.dmoral.toasty.Toasty
+import sh.tyy.wheelpicker.DayTimePicker
+import sh.tyy.wheelpicker.core.TextWheelPickerView
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
+import sh.tyy.wheelpicker.core.TextWheelAdapter
 
 
 open class AreaCardActivity : BaseDetailActivity() {
 
     // Here, we have created new array list and added data to it
     val courseModelArrayList: ArrayList<CourseModel> = ArrayList<CourseModel>()
+
+    private var selRoomIdx:Int = 0
+    private var selRoomNumberIdx:Int = 0
+    private val roomNumberList = ('A'..'Z').map {
+        TextWheelPickerView.Item(
+            "$it",
+            "$it"
+        )
+    }
+    private val roomMap = mapOf(
+        "bedroom" to "bedroom","hall" to "hall",
+        "kitchen" to "kitchen","living" to "living",
+        "toilet" to "toilet","wic" to "wic",
+        "room_wa" to "room_wa","room_yo" to "room_yo",
+        "stairs" to "stairs","other" to "other"
+    )
+    private val roomIndexList = listOf(
+        "bedroom" , "hall",
+        "kitchen" , "living",
+        "toilet" , "wic",
+        "room_wa" , "room_yo",
+        "stairs" , "other"
+    )
+    private val roomList = roomIndexList.map {
+        TextWheelPickerView.Item(
+            "$it",
+            "$it"
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,12 +125,53 @@ open class AreaCardActivity : BaseDetailActivity() {
     override fun othersOnOptionsItemSelected(item: MenuItem) {
         super.othersOnOptionsItemSelected(item)
         if (item.itemId == R.id.save_item) {
-            val intent1 = Intent(this, AreaDetailActivity::class.java)
-            startActivity(intent1)
+            // 直接输入detail
+            // 直接选择detail
+            // 都不用了，改为两排 picker
+            // val intent1 = Intent(this, AreaDetailActivity::class.java)
+            // val intent1 = Intent(this, AreaDetailSelectorActivity::class.java)
+            // startActivity(intent1)
+
+            showPicker()
         } else {
             Toasty.success(applicationContext, "Success!", Toast.LENGTH_SHORT, true).show();
 
             finish()
+        }
+    }
+
+    fun showPicker() {
+        val picker = DayTimePicker(this)
+
+        picker.show(window)
+        picker.pickerView?.day = 0
+        picker.pickerView?.hour = 0
+
+        val one = picker.pickerView!!::class.java.getDeclaredField("minutePickerView")
+        one.isAccessible = true
+        val one2 = one.get(picker.pickerView) as TextWheelPickerView
+        one2.isVisible = false
+
+        val adapter = picker.pickerView!!::class.java.getDeclaredField("hourAdapter")
+        adapter.isAccessible = true
+        val adapter2 = adapter.get(picker.pickerView) as TextWheelAdapter
+        adapter2.values = roomNumberList
+
+        val adapterDay = picker.pickerView!!::class.java.getDeclaredField("dayAdapter")
+        adapterDay.isAccessible = true
+        val adapterDay2 = adapterDay.get(picker.pickerView) as TextWheelAdapter
+        adapterDay2.values = roomList
+
+        picker.setOnClickOkButtonListener {
+            val pickerView = picker.pickerView ?: return@setOnClickOkButtonListener
+            selRoomIdx = pickerView.day
+            selRoomNumberIdx = pickerView.hour
+
+            Logger.d("ok")
+            picker.hide()
+        }
+        picker.setOnDismissListener {
+            Toast.makeText(this, "Action Sheet Dismiss", Toast.LENGTH_SHORT).show()
         }
     }
 }

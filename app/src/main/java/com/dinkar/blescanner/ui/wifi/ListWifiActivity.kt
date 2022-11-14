@@ -9,7 +9,7 @@ import com.dinkar.blescanner.R
 import com.dinkar.blescanner.ui.wifi.ui.wifi.ListWifiFragment
 import es.dmoral.toasty.Toasty
 
-class ListWifiActivity : BaseDetailActivity() {
+open class ListWifiActivity : BaseDetailActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

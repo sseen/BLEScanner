@@ -37,7 +37,7 @@ class ListWifiFragment : Fragment() {
         val texts = arrayOf("abc ", "bcd", "cde", "def", "efg",
             "fgh", "ghi", "hij", "ijk", "jkl", "klm","lmn","mno","nop",
             "opq","pqr","qrs","rst","stu","tuv","uvw","vwx","wxy","xyz")
-        val adapter = ArrayAdapter(context!!, android.R.layout.simple_list_item_multiple_choice, texts)
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_multiple_choice, texts)
         binding.listWifiDetail.adapter = adapter
 //        binding.listWifiDetail.adapter = ListWifiRecyclerViewAdapter()
 

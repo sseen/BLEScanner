@@ -18,7 +18,7 @@ class AreaDetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(AreaDetailViewModel::class.java)
+        viewModel = ViewModelProvider(this)[AreaDetailViewModel::class.java]
         // TODO: Use the ViewModel
     }
 
