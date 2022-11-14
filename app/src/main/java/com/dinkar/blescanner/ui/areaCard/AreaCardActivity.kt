@@ -1,18 +1,22 @@
 package com.dinkar.blescanner.ui.areaCard
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.PopupWindow
 import android.widget.Toast
+import androidx.appcompat.view.menu.MenuPopupHelper
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dinkar.blescanner.BaseDetailActivity
 import com.dinkar.blescanner.R
 import com.dinkar.blescanner.ui.areaCard.detail.AreaDetailActivity
-import com.dinkar.blescanner.ui.beacon.BeaconActivity
 import es.dmoral.toasty.Toasty
+
 
 class AreaCardActivity : BaseDetailActivity() {
 
@@ -39,6 +43,42 @@ class AreaCardActivity : BaseDetailActivity() {
         // in below two lines we are setting layoutmanager and adapter to our recycler view.
         courseRV.layoutManager = linearLayoutManager
         courseRV.adapter = courseAdapter
+
+
+        courseAdapter.setOnItemClickListener(object : AreaCardAdapter.OnItemClickListener {
+            @SuppressLint("RestrictedApi")
+            override fun onItemLongClick(view: View?, pos: Int) {
+                val popupMenu = view?.let { PopupMenu(this@AreaCardActivity, it) }
+                if (popupMenu != null) {
+                    popupMenu.menuInflater.inflate(R.menu.delete, popupMenu.menu)
+
+                    //弹出式菜单的菜单项点击事件
+                    popupMenu.setOnMenuItemClickListener(object :
+                        PopupMenu.OnMenuItemClickListener {
+                        override fun onMenuItemClick(item: MenuItem): Boolean {
+//                            if (item.itemId == R.id.delete) {
+//                                chatData.remove(pos)
+//                                chatAdapter.notifyItemRemoved(pos)
+//                            }
+                            return false
+                        }
+                    })
+
+                    var one = popupMenu::class.java.getDeclaredField("mPopup")
+                    one.isAccessible = true
+                    var mHelper = one.get(popupMenu) as MenuPopupHelper
+                    mHelper.setForceShowIcon(true)
+
+//                    val pWindow = PopupWindow(view).apply {
+//                        isOutsideTouchable = true
+//                        isFocusable = true
+//                    }
+
+//                    pWindow.show
+                    popupMenu.show()
+                }
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

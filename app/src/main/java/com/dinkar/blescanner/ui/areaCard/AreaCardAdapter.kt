@@ -11,6 +11,7 @@ import com.dinkar.blescanner.R
 
 class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayList<CourseModel>) :
     RecyclerView.Adapter<AreaCardAdapter.ViewHolder>() {
+
     private val courseModelArrayList: ArrayList<CourseModel>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AreaCardAdapter.ViewHolder {
@@ -23,6 +24,13 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
         // to set data to textview and imageview of each card layout
         val model: CourseModel = courseModelArrayList[position]
         holder.tvTitle.text = model.getCourse_name()
+
+        if (onItemClickListener != null) {
+            holder.itemView.setOnLongClickListener {
+                onItemClickListener!!.onItemLongClick(holder.itemView, position)
+                false
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -44,5 +52,16 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
     // Constructor
     init {
         this.courseModelArrayList = courseModelArrayList
+    }
+
+    // add long press listener
+    private var onItemClickListener: OnItemClickListener? = null
+
+    interface OnItemClickListener {
+        fun onItemLongClick(view: View?, pos: Int)
+    }
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.onItemClickListener = onItemClickListener
     }
 }
