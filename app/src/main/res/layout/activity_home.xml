@@ -13,36 +13,44 @@
     app:showDivider="middle"
     tools:context=".ui.main.HomeActivity">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/home_bt_beacon"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@color/home_beacon"
         android:text="@string/home_bt_beacon"
+        app:cornerRadius="40dp"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/home_beacon"
         android:textSize="20sp" />
 
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/home_bt_data"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@color/home_data"
         android:text="@string/home_bt_data"
+        app:cornerRadius="40dp"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/home_data"
         android:textSize="20sp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/home_bt_location"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@color/home_area"
         android:text="@string/home_bt_location"
+        app:cornerRadius="40dp"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/home_area"
         android:textSize="20sp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/home_bt_wifi"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@color/home_wifi"
         android:text="@string/home_bt_wifi"
+        app:cornerRadius="40dp"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/home_wifi"
         android:textSize="20sp" />
 </com.google.android.flexbox.FlexboxLayout>

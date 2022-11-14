@@ -18,8 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/beacon_device_name"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        >
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/beacon_device_name"
@@ -32,19 +31,22 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:hint="@string/beacon_user_name">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/beacon_user_name"
-            android:minHeight="48dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:textColorHint="#757575" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:hint="@string/beacon_other_name">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -56,12 +58,33 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/beacon_bt_done"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="80dp"
         android:layout_marginTop="30dp"
-        android:background="@color/home_beacon"
         android:text="@string/button_save"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        app:strokeColor="@color/black"
+        app:cornerRadius="40dp"
+        />
+
+<!--    <Button-->
+<!--        android:id="@+id/appcompat_button2"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:text="string"-->
+<!--        app:strokeColor="@color/black"-->
+<!--        app:strokeWidth="3dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        />-->
+
+
+<!--    <androidx.appcompat.widget.AppCompatButton-->
+<!--        android:id="@+id/appcompat_button"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="string"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        />-->
 </com.google.android.flexbox.FlexboxLayout>
