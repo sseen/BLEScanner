@@ -126,12 +126,11 @@ open class AreaCardActivity : BaseDetailActivity() {
         super.othersOnOptionsItemSelected(item)
         if (item.itemId == R.id.save_item) {
             // 直接输入detail
-            // 直接选择detail
-            // 都不用了，改为两排 picker
             // val intent1 = Intent(this, AreaDetailActivity::class.java)
+            // 直接选择detail
             // val intent1 = Intent(this, AreaDetailSelectorActivity::class.java)
             // startActivity(intent1)
-
+            // 都不用了，改为两排 picker
             showPicker()
         } else {
             Toasty.success(applicationContext, "Success!", Toast.LENGTH_SHORT, true).show();
@@ -140,7 +139,7 @@ open class AreaCardActivity : BaseDetailActivity() {
         }
     }
 
-    fun showPicker() {
+    private fun showPicker() {
         val picker = DayTimePicker(this)
 
         picker.show(window)
