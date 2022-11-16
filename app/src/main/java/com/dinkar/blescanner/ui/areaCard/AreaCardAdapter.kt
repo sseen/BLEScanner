@@ -1,11 +1,13 @@
 package com.dinkar.blescanner.ui.areaCard
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.dinkar.blescanner.R
 
@@ -13,6 +15,9 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
     RecyclerView.Adapter<AreaCardAdapter.ViewHolder>() {
 
     private val courseModelArrayList: ArrayList<CourseModel>
+
+    var selIndex = -1;
+    var isLoading = false;
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AreaCardAdapter.ViewHolder {
         // to inflate the layout for each item of recycler view.
@@ -25,9 +30,27 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
         val model: CourseModel = courseModelArrayList[position]
         holder.tvTitle.text = model.getCourse_name()
 
+        if (isLoading) {
+            isLoading = false
+            holder.bg.setBackgroundColor(Color.WHITE)
+            holder.btReload.isVisible = true
+            selIndex = -1;
+        }
+
+        if (selIndex == position) {
+            holder.bg.setBackgroundColor(Color.GRAY);
+            isLoading = true
+        }
+
         if (onItemClickListener != null) {
             holder.itemView.setOnLongClickListener {
                 onItemClickListener!!.onItemLongClick(holder.itemView, position)
+                false
+            }
+        }
+        if (onItemShortClickListener != null) {
+            holder.itemView.setOnClickListener {
+                onItemShortClickListener!!.onItemLongClick(holder.itemView, position)
                 false
             }
         }
@@ -41,11 +64,14 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
     // View holder class for initializing of your views such as TextView and Imageview.
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+        val bg: View
          val tvTitle: TextView
          val btReload: ImageButton
         init {
             tvTitle = itemView.findViewById(R.id.idRVAreaTitle)
             btReload = itemView.findViewById(R.id.idRVAreaBt)
+            btReload.isVisible = false
+            bg = itemView.findViewById(R.id.idRVContent)
         }
     }
 
@@ -56,6 +82,7 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
 
     // add long press listener
     private var onItemClickListener: OnItemClickListener? = null
+    private var onItemShortClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
         fun onItemLongClick(view: View?, pos: Int)
@@ -63,5 +90,9 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
         this.onItemClickListener = onItemClickListener
+    }
+
+    fun setOnItemShortClickListener(onItemClickListener: OnItemClickListener) {
+        this.onItemShortClickListener = onItemClickListener
     }
 }

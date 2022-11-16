@@ -14,6 +14,7 @@
     app:cardUseCompatPadding="false">
 
     <LinearLayout
+        android:id="@+id/idRVContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -25,7 +26,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:layout_weight="1"
-            android:paddingLeft="50dp"
             android:text="@string/area_title"
             android:textAlignment="center"
             android:textColor="@color/black"

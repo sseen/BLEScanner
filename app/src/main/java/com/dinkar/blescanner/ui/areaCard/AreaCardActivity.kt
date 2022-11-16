@@ -96,6 +96,13 @@ open class AreaCardActivity : BaseDetailActivity() {
         courseRV.layoutManager = linearLayoutManager
         courseRV.adapter = courseAdapter
 
+        courseAdapter.setOnItemShortClickListener(object : AreaCardAdapter.OnItemClickListener {
+            override fun onItemLongClick(view: View?, pos: Int) {
+                
+                courseAdapter.selIndex = pos
+                courseAdapter.notifyItemChanged(pos)
+            }
+        })
 
         courseAdapter.setOnItemClickListener(object : AreaCardAdapter.OnItemClickListener {
             @SuppressLint("RestrictedApi")
