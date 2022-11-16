@@ -13,7 +13,7 @@
     app:cardMaxElevation="10dp"
     app:cardUseCompatPadding="false">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/idRVContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
 
         <TextView
             android:id="@+id/idRVAreaTitle"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:layout_weight="1"
@@ -36,11 +36,12 @@
             android:id="@+id/idRVAreaBt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+            android:layout_alignEnd="@id/idRVAreaTitle"
+            android:layout_centerVertical="true"
             android:backgroundTint="@android:color/transparent"
             android:contentDescription="@string/button_done"
             android:minHeight="48dp"
             android:src="@drawable/baseline_refresh_blue_800_24dp"></ImageButton>
 
-    </LinearLayout>
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>
