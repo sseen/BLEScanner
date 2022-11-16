@@ -2,8 +2,8 @@ package com.dinkar.blescanner.ui.areaCard
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.text.Html
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -19,12 +19,15 @@ import com.dinkar.blescanner.R
 import com.dinkar.blescanner.UserModel
 import com.dinkar.blescanner.Utils
 import com.google.gson.Gson
+import com.orhanobut.logger.Logger
+import dev.shreyaspatil.MaterialDialog.AbstractDialog
+import dev.shreyaspatil.MaterialDialog.MaterialDialog
+import dev.shreyaspatil.MaterialDialog.interfaces.DialogInterface
+import dev.shreyaspatil.MaterialDialog.model.TextAlignment
 import es.dmoral.toasty.Toasty
 import sh.tyy.wheelpicker.DayTimePicker
-import sh.tyy.wheelpicker.core.TextWheelPickerView
-import com.orhanobut.logger.AndroidLogAdapter
-import com.orhanobut.logger.Logger
 import sh.tyy.wheelpicker.core.TextWheelAdapter
+import sh.tyy.wheelpicker.core.TextWheelPickerView
 
 
 open class AreaCardActivity : BaseDetailActivity() {
@@ -96,11 +99,35 @@ open class AreaCardActivity : BaseDetailActivity() {
         courseRV.layoutManager = linearLayoutManager
         courseRV.adapter = courseAdapter
 
+        // Simple Material Dialog
+        val mSimpleDialog = MaterialDialog.Builder(this)
+            .setTitle("保存", TextAlignment.CENTER)
+            .setMessage(Html.fromHtml("テストデータを取得しますか?"), TextAlignment.CENTER)
+            .setCancelable(false)
+            .setPositiveButton("保存",
+                object : AbstractDialog.OnClickListener {
+                    override fun onClick(dialogInterface: DialogInterface, i: Int) {
+                        Toast.makeText(getApplicationContext(), "Deleted!", Toast.LENGTH_SHORT).show()
+                        dialogInterface.dismiss()
+                    }
+                })
+            .setNegativeButton("キャンセル",
+                object : AbstractDialog.OnClickListener {
+                    override fun onClick(dialogInterface: DialogInterface, which: Int) {
+                        dialogInterface.dismiss()
+                        finish()
+                    }
+                })
+            .build()
+
         courseAdapter.setOnItemShortClickListener(object : AreaCardAdapter.OnItemClickListener {
             override fun onItemLongClick(view: View?, pos: Int) {
-                
                 courseAdapter.selIndex = pos
                 courseAdapter.notifyItemChanged(pos)
+
+                if (courseAdapter.isLoading) {
+                    mSimpleDialog.show()
+                }
             }
         })
 
