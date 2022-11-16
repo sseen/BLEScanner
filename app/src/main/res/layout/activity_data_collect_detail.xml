@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:layout_marginLeft="16dp"
+android:layout_marginRight="16dp"
+android:paddingTop="40dp"
+android:orientation="vertical"
+app:dividerDrawable="@drawable/divider"
+app:flexDirection="column"
+app:justifyContent="flex_start"
+app:showDivider="middle"
+tools:context=".ui.dataCollect.DataCollectDetailActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:textAlignment="center"
+        android:id="@+id/idTV_DataCollect_title"
+        android:text="@string/data_collect_title"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:layout_height="wrap_content">
+    </TextView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:textAlignment="center"
+        android:id="@+id/idTV_DataCollect_user"
+        android:text="@string/beacon_device_user"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:layout_height="wrap_content">
+    </TextView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/idBt_DataCollect_done"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/button_yes"
+        android:textSize="20sp"
+        app:strokeColor="@color/black"
+        app:cornerRadius="35dp"
+    />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/idBt_DataCollect_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/button_no"
+        android:textSize="20sp"
+        app:strokeColor="@color/black"
+        app:cornerRadius="35dp"
+        />
+
+</com.google.android.flexbox.FlexboxLayout>

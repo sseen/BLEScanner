@@ -27,9 +27,13 @@
     <string name="area_title">area title</string>
     <string name="area_detail_title">area detail title</string>
 
+    <string name="data_collect_title">テストデータを取得しますか？</string>
+
     <string name="button_save">Save</string>
     <string name="button_delete">Delete</string>
     <string name="button_done">Done</string>
+    <string name="button_yes">Yes</string>
+    <string name="button_no">No</string>
 
     <string name="course_name">course_name</string>
     <string name="course_rating">course_rating</string>

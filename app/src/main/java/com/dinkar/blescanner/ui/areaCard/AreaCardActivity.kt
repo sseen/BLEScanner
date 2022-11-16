@@ -2,6 +2,7 @@ package com.dinkar.blescanner.ui.areaCard
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.view.Menu
@@ -18,6 +19,9 @@ import com.dinkar.blescanner.BaseDetailActivity
 import com.dinkar.blescanner.R
 import com.dinkar.blescanner.UserModel
 import com.dinkar.blescanner.Utils
+import com.dinkar.blescanner.ui.beacon.BeaconActivity
+import com.dinkar.blescanner.ui.dataCollect.DataCollectDetailActivity
+import com.dinkar.blescanner.ui.dataCollect.DataColloctActivity
 import com.google.gson.Gson
 import com.orhanobut.logger.Logger
 import dev.shreyaspatil.MaterialDialog.AbstractDialog
@@ -81,7 +85,6 @@ open class AreaCardActivity : BaseDetailActivity() {
             lblTitle.setText(deviceName)
         }
 
-
         val courseRV = findViewById<RecyclerView>(R.id.idRVArea)
 
         courseModelArrayList.add(CourseModel("living room 1", 4, 1))
@@ -107,8 +110,10 @@ open class AreaCardActivity : BaseDetailActivity() {
             .setPositiveButton("保存",
                 object : AbstractDialog.OnClickListener {
                     override fun onClick(dialogInterface: DialogInterface, i: Int) {
-                        Toast.makeText(getApplicationContext(), "Deleted!", Toast.LENGTH_SHORT).show()
                         dialogInterface.dismiss()
+
+                        val intent1 = Intent(applicationContext, DataCollectDetailActivity::class.java)
+                        startActivity(intent1)
                     }
                 })
             .setNegativeButton("キャンセル",
