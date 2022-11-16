@@ -14,14 +14,14 @@
         <item>Wifi</item>
     </string-array>
 
-    <string name="home_bt_beacon">User setting</string>
+    <string name="home_bt_beacon">測定者設定</string>
     <string name="home_bt_wifi">WiFi Setting</string>
     <string name="home_bt_location">Training Data Setting</string>
     <string name="home_bt_data">Test Data Collect</string>
 
-    <string name="beacon_device_name">beacon_device_name</string>
-    <string name="beacon_user_name">beacon_user_name</string>
-    <string name="beacon_other_name">beacon_other_name</string>
+    <string name="beacon_device_name">設備</string>
+    <string name="beacon_user_name">測定者</string>
+    <string name="beacon_other_name">備考</string>
 
     <string name="area_title">area title</string>
     <string name="area_detail_title">area detail title</string>

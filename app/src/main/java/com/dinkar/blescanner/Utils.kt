@@ -1,6 +1,8 @@
 package com.dinkar.blescanner
 
 object Utils {
+    val user = "user"
+
     val ALL = "all"
     val EDDYSTONE = "addystone"
     val WIFI = "wifi"
