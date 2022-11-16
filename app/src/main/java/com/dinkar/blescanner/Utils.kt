@@ -2,6 +2,7 @@ package com.dinkar.blescanner
 
 object Utils {
     val user = "user"
+    val share_pre = "PREFERENCE_NAME"
 
     val ALL = "all"
     val EDDYSTONE = "addystone"

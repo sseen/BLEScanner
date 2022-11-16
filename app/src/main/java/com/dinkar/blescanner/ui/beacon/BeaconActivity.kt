@@ -25,7 +25,7 @@ class BeaconActivity : BaseDetailActivity() {
         setTitle(R.string.home_bt_beacon)
 
 
-        var mPrefs =  getPreferences(Context.MODE_PRIVATE)
+        var mPrefs =  getSharedPreferences(Utils.share_pre,Context.MODE_PRIVATE)
 
         val tvDevice = findViewById<View>(R.id.beacon_device_name) as EditText
         val tvUserName = findViewById<View>(R.id.beacon_user_name) as EditText
@@ -35,15 +35,18 @@ class BeaconActivity : BaseDetailActivity() {
         var json = mPrefs.getString(Utils.user, "")
         var myUser = gson.fromJson(json, UserModel::class.java)
 
-        if (myUser.device.isNotEmpty()) {
-            tvDevice.setText(myUser.device)
+        if (myUser != null) {
+            if (myUser.device.isNotEmpty()) {
+                tvDevice.setText(myUser.device)
+            }
+            if (myUser.userName.isNotEmpty()) {
+                tvUserName.setText(myUser.userName)
+            }
+            if (myUser.idStr.isNotEmpty()) {
+                tvOther.setText(myUser.idStr)
+            }
         }
-        if (myUser.userName.isNotEmpty()) {
-            tvUserName.setText(myUser.userName)
-        }
-        if (myUser.idStr.isNotEmpty()) {
-            tvOther.setText(myUser.idStr)
-        }
+
 
         // get reference to button
         val btn_click_me = findViewById<View>(R.id.beacon_bt_done) as Button

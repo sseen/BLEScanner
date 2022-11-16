@@ -1,11 +1,13 @@
 package com.dinkar.blescanner.ui.areaCard
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.PopupMenu
@@ -14,6 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dinkar.blescanner.BaseDetailActivity
 import com.dinkar.blescanner.R
+import com.dinkar.blescanner.UserModel
+import com.dinkar.blescanner.Utils
+import com.google.gson.Gson
 import es.dmoral.toasty.Toasty
 import sh.tyy.wheelpicker.DayTimePicker
 import sh.tyy.wheelpicker.core.TextWheelPickerView
@@ -60,6 +65,19 @@ open class AreaCardActivity : BaseDetailActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_area_card)
         setTitle(R.string.home_bt_location)
+
+        var mPrefs =  getSharedPreferences(Utils.share_pre, Context.MODE_PRIVATE)
+        var gson = Gson()
+        var json = mPrefs.getString(Utils.user, "")
+        var myUser = gson.fromJson(json, UserModel::class.java)
+
+        if (myUser != null) {
+            val lblTitle = findViewById<TextView>(R.id.idTVDeviceUser)
+            val deviceName =
+                getString(R.string.beacon_device_user, myUser.device,myUser.userName)
+            lblTitle.setText(deviceName)
+        }
+
 
         val courseRV = findViewById<RecyclerView>(R.id.idRVArea)
 
