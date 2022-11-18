@@ -69,6 +69,8 @@ open class AreaCardActivity : BaseDetailActivity() {
         )
     }
 
+    lateinit var courseAdapter:AreaCardAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_area_card)
@@ -93,7 +95,7 @@ open class AreaCardActivity : BaseDetailActivity() {
         courseModelArrayList.add(CourseModel("kitchen 3", 4, 1))
 
         // we are initializing our adapter class and passing our arraylist to it.
-        val courseAdapter = AreaCardAdapter(this, courseModelArrayList)
+        courseAdapter = AreaCardAdapter(this, courseModelArrayList)
 
         // below line is for setting a layout manager for our recycler view.
         // here we are creating vertical list so we will provide orientation as vertical
@@ -131,14 +133,20 @@ open class AreaCardActivity : BaseDetailActivity() {
             mSimpleDialog.show()
         }
 
+        courseAdapter.isTeacherData = true
         // click cell selection
         courseAdapter.setOnItemShortClickListener(object : AreaCardAdapter.OnItemClickListener {
-         override fun onItemLongClick(view: View?, pos: Int) {
-             courseAdapter.previousSelIndex = courseAdapter.nowSelIndex
-             courseAdapter.nowSelIndex = pos
-             courseAdapter.notifyItemChanged(pos)
-             courseAdapter.notifyItemChanged(courseAdapter.previousSelIndex)
-         }
+            override fun onItemLongClick(view: View?, pos: Int) {
+                if (courseAdapter.selIndex != -1) {
+                    if (courseAdapter.selIndex == pos) {
+                        courseAdapter.selIndex = pos
+                        courseAdapter.notifyItemChanged(pos)
+                    }
+                } else {
+                    courseAdapter.selIndex = pos
+                    courseAdapter.notifyItemChanged(pos)
+                }
+            }
         })
 
         courseAdapter.setOnItemClickListener(object : AreaCardAdapter.OnItemClickListener {

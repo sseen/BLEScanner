@@ -19,7 +19,9 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
 
     var previousSelIndex = -1;
     var nowSelIndex = -1;
-    var isLoading = -1;
+    var isLoading = false;
+    var selIndex = -1;
+    var isTeacherData = false;
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AreaCardAdapter.ViewHolder {
         // to inflate the layout for each item of recycler view.
@@ -33,16 +35,32 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
         val model: CourseModel = courseModelArrayList[position]
         holder.tvTitle.text = model.getCourse_name()
 
-        if (previousSelIndex == position) {
-            holder.bg.setBackgroundColor(Color.WHITE)
-            holder.btReload.isVisible = true
-            previousSelIndex = nowSelIndex;
-        }
+        if (isTeacherData) {
+            // 教师数据收集
+            if (selIndex == position) {
+                if (isLoading) {
+                    isLoading = false
+                    holder.bg.setBackgroundColor(Color.WHITE)
+                    holder.btReload.isVisible = true
+                    selIndex = -1
+                } else {
+                    holder.bg.setBackgroundColor(R.color.colorPrimary)
+                    isLoading = true
+                }
+            }
+        } else {
+            // 测试数据收集
+            if (previousSelIndex == position) {
+                holder.bg.setBackgroundColor(Color.WHITE)
+                holder.btReload.isVisible = true
+                previousSelIndex = nowSelIndex;
+            }
 
-        if (nowSelIndex == position) {
-            holder.bg.setBackgroundColor(R.color.colorPrimary);
-            holder.tvTitle.text = "取得中"
-            holder.btReload.isVisible = false
+            if (nowSelIndex == position) {
+                holder.bg.setBackgroundColor(R.color.colorPrimary);
+                holder.tvTitle.text = "取得中"
+                holder.btReload.isVisible = false
+            }
         }
 
         if (onItemClickListener != null) {
