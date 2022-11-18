@@ -61,12 +61,12 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/beacon_bt_done"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:layout_marginTop="30dp"
         android:text="@string/button_save"
-        android:textSize="20sp"
+        android:textSize="18sp"
         app:strokeColor="@color/black"
-        app:cornerRadius="40dp"
+        app:cornerRadius="10dp"
         />
 
 <!--    <Button-->

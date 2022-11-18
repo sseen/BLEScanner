@@ -1,5 +1,6 @@
 package com.dinkar.blescanner.ui.areaCard
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -16,8 +17,9 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
 
     private val courseModelArrayList: ArrayList<CourseModel>
 
-    var selIndex = -1;
-    var isLoading = false;
+    var previousSelIndex = -1;
+    var nowSelIndex = -1;
+    var isLoading = -1;
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AreaCardAdapter.ViewHolder {
         // to inflate the layout for each item of recycler view.
@@ -25,21 +27,22 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
         return AreaCardAdapter.ViewHolder(view)
     }
 
+    @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: AreaCardAdapter.ViewHolder, position: Int) {
         // to set data to textview and imageview of each card layout
         val model: CourseModel = courseModelArrayList[position]
         holder.tvTitle.text = model.getCourse_name()
 
-        if (isLoading) {
-            isLoading = false
+        if (previousSelIndex == position) {
             holder.bg.setBackgroundColor(Color.WHITE)
             holder.btReload.isVisible = true
-            selIndex = -1;
+            previousSelIndex = nowSelIndex;
         }
 
-        if (selIndex == position) {
-            holder.bg.setBackgroundColor(Color.GRAY);
-            isLoading = true
+        if (nowSelIndex == position) {
+            holder.bg.setBackgroundColor(R.color.colorPrimary);
+            holder.tvTitle.text = "取得中"
+            holder.btReload.isVisible = false
         }
 
         if (onItemClickListener != null) {

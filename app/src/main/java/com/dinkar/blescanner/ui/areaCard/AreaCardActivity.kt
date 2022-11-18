@@ -29,6 +29,7 @@ import dev.shreyaspatil.MaterialDialog.MaterialDialog
 import dev.shreyaspatil.MaterialDialog.interfaces.DialogInterface
 import dev.shreyaspatil.MaterialDialog.model.TextAlignment
 import es.dmoral.toasty.Toasty
+import kotlinx.android.synthetic.main.activity_area_card.*
 import sh.tyy.wheelpicker.DayTimePicker
 import sh.tyy.wheelpicker.core.TextWheelAdapter
 import sh.tyy.wheelpicker.core.TextWheelPickerView
@@ -82,7 +83,7 @@ open class AreaCardActivity : BaseDetailActivity() {
             val lblTitle = findViewById<TextView>(R.id.idTVDeviceUser)
             val deviceName =
                 getString(R.string.beacon_device_user, myUser.device,myUser.userName)
-            lblTitle.setText(deviceName)
+            lblTitle.text = deviceName
         }
 
         val courseRV = findViewById<RecyclerView>(R.id.idRVArea)
@@ -107,33 +108,37 @@ open class AreaCardActivity : BaseDetailActivity() {
             .setTitle("保存", TextAlignment.CENTER)
             .setMessage(Html.fromHtml("テストデータを取得しますか?"), TextAlignment.CENTER)
             .setCancelable(false)
-            .setPositiveButton("保存",
-                object : AbstractDialog.OnClickListener {
-                    override fun onClick(dialogInterface: DialogInterface, i: Int) {
-                        dialogInterface.dismiss()
+            .setPositiveButton("保存") { dialogInterface, _ ->
+                dialogInterface.dismiss()
 
-                        val intent1 = Intent(applicationContext, DataCollectDetailActivity::class.java)
-                        startActivity(intent1)
-                    }
-                })
-            .setNegativeButton("キャンセル",
-                object : AbstractDialog.OnClickListener {
-                    override fun onClick(dialogInterface: DialogInterface, which: Int) {
-                        dialogInterface.dismiss()
-                        finish()
-                    }
-                })
+                val intent1 = Intent(applicationContext, DataCollectDetailActivity::class.java)
+                startActivity(intent1)
+            }
+            .setNegativeButton("キャンセル") { dialogInterface, _ ->
+                dialogInterface.dismiss()
+                finish()
+            }
             .build()
 
-        courseAdapter.setOnItemShortClickListener(object : AreaCardAdapter.OnItemClickListener {
-            override fun onItemLongClick(view: View?, pos: Int) {
-                courseAdapter.selIndex = pos
-                courseAdapter.notifyItemChanged(pos)
+        // buttons control
+        idBt_DataCollect_finish.setOnClickListener {
+            idBt_DataCollect_save.isEnabled = true
+            courseAdapter.previousSelIndex = courseAdapter.nowSelIndex
+            courseAdapter.nowSelIndex = -1
+            courseAdapter.notifyItemChanged(courseAdapter.previousSelIndex)
+        }
+        idBt_DataCollect_save.setOnClickListener {
+            mSimpleDialog.show()
+        }
 
-                if (courseAdapter.isLoading) {
-                    mSimpleDialog.show()
-                }
-            }
+        // click cell selection
+        courseAdapter.setOnItemShortClickListener(object : AreaCardAdapter.OnItemClickListener {
+         override fun onItemLongClick(view: View?, pos: Int) {
+             courseAdapter.previousSelIndex = courseAdapter.nowSelIndex
+             courseAdapter.nowSelIndex = pos
+             courseAdapter.notifyItemChanged(pos)
+             courseAdapter.notifyItemChanged(courseAdapter.previousSelIndex)
+         }
         })
 
         courseAdapter.setOnItemClickListener(object : AreaCardAdapter.OnItemClickListener {
@@ -157,12 +162,11 @@ open class AreaCardActivity : BaseDetailActivity() {
                     var mHelper = one.get(popupMenu) as MenuPopupHelper
                     mHelper.setForceShowIcon(true)
 
-//                    val pWindow = PopupWindow(view).apply {
-//                        isOutsideTouchable = true
-//                        isFocusable = true
-//                    }
-
-//                    pWindow.show
+                    // val pWindow = PopupWindow(view).apply {
+                    //     isOutsideTouchable = true
+                    //     isFocusable = true
+                    // }
+                    // pWindow.show
                     popupMenu.show()
                 }
             }
@@ -203,6 +207,7 @@ open class AreaCardActivity : BaseDetailActivity() {
         picker.pickerView?.day = 0
         picker.pickerView?.hour = 0
 
+        // reflect to change data source
         val one = picker.pickerView!!::class.java.getDeclaredField("minutePickerView")
         one.isAccessible = true
         val one2 = one.get(picker.pickerView) as TextWheelPickerView
