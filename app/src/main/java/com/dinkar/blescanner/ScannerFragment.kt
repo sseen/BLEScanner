@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -121,7 +122,7 @@ class ScannerFragment : Fragment() {
         // wifi扫描结果监听
         val intentFilter = IntentFilter()
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-        context!!.registerReceiver(wifiScanReceiver, intentFilter)
+        requireContext().registerReceiver(wifiScanReceiver, intentFilter)
 
         startScanWifis()
     }
@@ -195,7 +196,7 @@ class ScannerFragment : Fragment() {
 
     private fun checkForLocationPermission() {
         // Make sure we have access coarse location enabled, if not, prompt the user to enable it
-        if (activity!!.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (requireActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             val builder = AlertDialog.Builder(activity)
             builder.setTitle("This app needs location access")
             builder.setMessage("Please grant location access so this app can detect  peripherals.")
@@ -243,6 +244,7 @@ class ScannerFragment : Fragment() {
 
             val scanRecord = result.scanRecord
             val beacon = Beacon(result.device.address)
+
             beacon.manufacturer = result.device.name
             beacon.rssi = result.rssi
             if (scanRecord != null) {
