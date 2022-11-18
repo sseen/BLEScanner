@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.dinkar.blescanner.R
@@ -44,7 +46,8 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
                     holder.btReload.isVisible = true
                     selIndex = -1
                 } else {
-                    holder.bg.setBackgroundColor(R.color.colorPrimary)
+                    holder.bg.setBackgroundColor(ContextCompat.getColor(context,R.color.home_wifi))
+                    holder.tvTitle.text = "取得中"
                     isLoading = true
                 }
             }
@@ -57,7 +60,7 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
             }
 
             if (nowSelIndex == position) {
-                holder.bg.setBackgroundColor(R.color.colorPrimary)
+                holder.bg.setBackgroundColor(ContextCompat.getColor(context,R.color.home_wifi))
                 holder.tvTitle.text = "取得中"
                 holder.btReload.isVisible = false
             }
@@ -84,7 +87,7 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
     // View holder class for initializing of your views such as TextView and Imageview.
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val bg: View
+        val bg: RelativeLayout
         val tvTitle: TextView
         val btReload: ImageButton
         init {
