@@ -19,14 +19,10 @@ import com.dinkar.blescanner.BaseDetailActivity
 import com.dinkar.blescanner.R
 import com.dinkar.blescanner.UserModel
 import com.dinkar.blescanner.Utils
-import com.dinkar.blescanner.ui.beacon.BeaconActivity
 import com.dinkar.blescanner.ui.dataCollect.DataCollectDetailActivity
-import com.dinkar.blescanner.ui.dataCollect.DataColloctActivity
 import com.google.gson.Gson
 import com.orhanobut.logger.Logger
-import dev.shreyaspatil.MaterialDialog.AbstractDialog
 import dev.shreyaspatil.MaterialDialog.MaterialDialog
-import dev.shreyaspatil.MaterialDialog.interfaces.DialogInterface
 import dev.shreyaspatil.MaterialDialog.model.TextAlignment
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_area_card.*
@@ -38,7 +34,7 @@ import sh.tyy.wheelpicker.core.TextWheelPickerView
 open class AreaCardActivity : BaseDetailActivity() {
 
     // Here, we have created new array list and added data to it
-    val courseModelArrayList: ArrayList<CourseModel> = ArrayList<CourseModel>()
+    val courseModelArrayList: ArrayList<CourseModel> = ArrayList()
 
     private var selRoomIdx:Int = 0
     private var selRoomNumberIdx:Int = 0
@@ -64,8 +60,8 @@ open class AreaCardActivity : BaseDetailActivity() {
     )
     private val roomList = roomIndexList.map {
         TextWheelPickerView.Item(
-            "$it",
-            "$it"
+            it,
+            it
         )
     }
 
@@ -76,10 +72,10 @@ open class AreaCardActivity : BaseDetailActivity() {
         setContentView(R.layout.activity_area_card)
         setTitle(R.string.home_bt_location)
 
-        var mPrefs =  getSharedPreferences(Utils.share_pre, Context.MODE_PRIVATE)
-        var gson = Gson()
-        var json = mPrefs.getString(Utils.user, "")
-        var myUser = gson.fromJson(json, UserModel::class.java)
+        val mPrefs =  getSharedPreferences(Utils.share_pre, Context.MODE_PRIVATE)
+        val gson = Gson()
+        val json = mPrefs.getString(Utils.user, "")
+        val myUser = gson.fromJson(json, UserModel::class.java)
 
         if (myUser != null) {
             val lblTitle = findViewById<TextView>(R.id.idTVDeviceUser)
@@ -101,7 +97,7 @@ open class AreaCardActivity : BaseDetailActivity() {
         // here we are creating vertical list so we will provide orientation as vertical
         val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        // in below two lines we are setting layoutmanager and adapter to our recycler view.
+        // in below two lines we are setting layout-manager and adapter to our recycler view.
         courseRV.layoutManager = linearLayoutManager
         courseRV.adapter = courseAdapter
 
@@ -165,9 +161,9 @@ open class AreaCardActivity : BaseDetailActivity() {
                         false
                     })
 
-                    var one = popupMenu::class.java.getDeclaredField("mPopup")
+                    val one = popupMenu::class.java.getDeclaredField("mPopup")
                     one.isAccessible = true
-                    var mHelper = one.get(popupMenu) as MenuPopupHelper
+                    val mHelper = one.get(popupMenu) as MenuPopupHelper
                     mHelper.setForceShowIcon(true)
 
                     // val pWindow = PopupWindow(view).apply {
@@ -202,7 +198,7 @@ open class AreaCardActivity : BaseDetailActivity() {
             // 都不用了，改为两排 picker
             showPicker()
         } else {
-            Toasty.success(applicationContext, "Success!", Toast.LENGTH_SHORT, true).show();
+            Toasty.success(applicationContext, "Success!", Toast.LENGTH_SHORT, true).show()
 
             finish()
         }

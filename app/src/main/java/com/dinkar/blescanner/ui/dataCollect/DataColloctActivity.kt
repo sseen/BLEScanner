@@ -1,13 +1,10 @@
 package com.dinkar.blescanner.ui.dataCollect
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.view.menu.MenuPopupHelper
-import androidx.appcompat.widget.PopupMenu
 import com.dinkar.blescanner.R
 import com.dinkar.blescanner.ui.areaCard.AreaCardActivity
 import com.dinkar.blescanner.ui.areaCard.AreaCardAdapter
@@ -19,6 +16,7 @@ class DataColloctActivity : AreaCardActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
+        setTitle(R.string.home_bt_data)
 
         // hide menu item button
         val item = menu?.findItem(R.id.save_item) as MenuItem

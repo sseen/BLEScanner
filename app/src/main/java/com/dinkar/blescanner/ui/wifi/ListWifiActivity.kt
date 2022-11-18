@@ -32,7 +32,7 @@ open class ListWifiActivity : BaseDetailActivity() {
     override fun othersOnOptionsItemSelected(item: MenuItem) {
         super.othersOnOptionsItemSelected(item)
         if (item.itemId == R.id.save_item) {
-            Toasty.success(applicationContext, "Success!", Toast.LENGTH_SHORT, true).show();
+            Toasty.success(applicationContext, "Success!", Toast.LENGTH_SHORT, true).show()
 
             finish()
         }

@@ -18,12 +18,12 @@ class DataCollectDetailActivity : BaseDetailActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_data_collect_detail)
 
-        setTitle(R.string.home_bt_location)
+        setTitle(R.string.home_bt_data)
 
-        var mPrefs =  getSharedPreferences(Utils.share_pre, Context.MODE_PRIVATE)
-        var gson = Gson()
-        var json = mPrefs.getString(Utils.user, "")
-        var myUser = gson.fromJson(json, UserModel::class.java)
+        val mPrefs =  getSharedPreferences(Utils.share_pre, Context.MODE_PRIVATE)
+        val gson = Gson()
+        val json = mPrefs.getString(Utils.user, "")
+        val myUser = gson.fromJson(json, UserModel::class.java)
 
         if (myUser != null) {
             val lblTitle = findViewById<TextView>(R.id.idTV_DataCollect_user)

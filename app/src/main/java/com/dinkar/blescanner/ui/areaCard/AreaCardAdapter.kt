@@ -17,20 +17,20 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
 
     private val courseModelArrayList: ArrayList<CourseModel>
 
-    var previousSelIndex = -1;
-    var nowSelIndex = -1;
-    var isLoading = false;
-    var selIndex = -1;
-    var isTeacherData = false;
+    var previousSelIndex = -1
+    var nowSelIndex = -1
+    private var isLoading = false
+    var selIndex = -1
+    var isTeacherData = false
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AreaCardAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // to inflate the layout for each item of recycler view.
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.card_area_layout, parent, false)
-        return AreaCardAdapter.ViewHolder(view)
+        return ViewHolder(view)
     }
 
     @SuppressLint("ResourceAsColor")
-    override fun onBindViewHolder(holder: AreaCardAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // to set data to textview and imageview of each card layout
         val model: CourseModel = courseModelArrayList[position]
         holder.tvTitle.text = model.getCourse_name()
@@ -53,11 +53,11 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
             if (previousSelIndex == position) {
                 holder.bg.setBackgroundColor(Color.WHITE)
                 holder.btReload.isVisible = true
-                previousSelIndex = nowSelIndex;
+                previousSelIndex = nowSelIndex
             }
 
             if (nowSelIndex == position) {
-                holder.bg.setBackgroundColor(R.color.colorPrimary);
+                holder.bg.setBackgroundColor(R.color.colorPrimary)
                 holder.tvTitle.text = "取得中"
                 holder.btReload.isVisible = false
             }
@@ -72,7 +72,6 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
         if (onItemShortClickListener != null) {
             holder.itemView.setOnClickListener {
                 onItemShortClickListener!!.onItemLongClick(holder.itemView, position)
-                false
             }
         }
     }
@@ -86,8 +85,8 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val bg: View
-         val tvTitle: TextView
-         val btReload: ImageButton
+        val tvTitle: TextView
+        val btReload: ImageButton
         init {
             tvTitle = itemView.findViewById(R.id.idRVAreaTitle)
             btReload = itemView.findViewById(R.id.idRVAreaBt)
