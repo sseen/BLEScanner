@@ -104,7 +104,7 @@ open class AreaCardActivity : BaseDetailActivity() {
         // Simple Material Dialog
         val mSimpleDialog = MaterialDialog.Builder(this)
             .setTitle("保存", TextAlignment.CENTER)
-            .setMessage(Html.fromHtml("テストデータを取得しますか?"), TextAlignment.CENTER)
+            .setMessage(Html.fromHtml(R.string.data_collect_title.toString()), TextAlignment.CENTER)
             .setCancelable(false)
             .setPositiveButton("保存") { dialogInterface, _ ->
                 dialogInterface.dismiss()
