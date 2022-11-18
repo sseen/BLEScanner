@@ -126,7 +126,9 @@ open class AreaCardActivity : BaseDetailActivity() {
             courseAdapter.notifyItemChanged(courseAdapter.previousSelIndex)
         }
         idBt_DataCollect_save.setOnClickListener {
-            mSimpleDialog.show()
+            // mSimpleDialog.show()
+            val intent1 = Intent(applicationContext, DataCollectDetailActivity::class.java)
+            startActivity(intent1)
         }
 
         courseAdapter.isTeacherData = true

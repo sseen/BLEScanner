@@ -1,5 +1,14 @@
 package com.dinkar.blescanner
 
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
+
+object SSLog {
+    fun p(string: String) {
+        Logger.d(string)
+    }
+}
+
 object Utils {
     val user = "user"
     val share_pre = "PREFERENCE_NAME"

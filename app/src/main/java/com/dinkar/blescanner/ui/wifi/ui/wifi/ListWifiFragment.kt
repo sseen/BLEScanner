@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
-import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.dinkar.blescanner.SSLog
 import com.dinkar.blescanner.databinding.FragmentListWifiBinding
-import com.dinkar.blescanner.ui.wifi.ListWifiRecyclerViewAdapter
+import com.dinkar.blescanner.ui.wifi.MSArrayAdapter
 
 
 class ListWifiFragment : Fragment() {
@@ -24,7 +23,7 @@ class ListWifiFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ListWifiViewModel::class.java)
-        // TODO: Use the ViewModel
+
     }
 
     override fun onCreateView(
@@ -32,16 +31,19 @@ class ListWifiFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentListWifiBinding.inflate(inflater, container, false)
-//        binding.listWifiDetail.layoutManager = LinearLayoutManager(requireContext())
+        // binding.listWifiDetail.layoutManager = LinearLayoutManager(requireContext())
 
         val texts = arrayOf("abc ", "bcd", "cde", "def", "efg",
             "fgh", "ghi", "hij", "ijk", "jkl", "klm","lmn","mno","nop",
             "opq","pqr","qrs","rst","stu","tuv","uvw","vwx","wxy","xyz")
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_multiple_choice, texts)
+        val adapter = MSArrayAdapter(requireContext(), android.R.layout.simple_list_item_multiple_choice, texts)
         binding.listWifiDetail.adapter = adapter
-//        binding.listWifiDetail.adapter = ListWifiRecyclerViewAdapter()
+        binding.listWifiDetail.setOnItemClickListener{ parent, view, position, id ->
+            SSLog.p(position.toString() + " ${binding.listWifiDetail.checkedItemIds.count()}")
+        }
 
         return binding.root
     }
 
 }
+
