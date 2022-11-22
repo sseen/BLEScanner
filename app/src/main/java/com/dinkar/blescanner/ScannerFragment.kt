@@ -26,6 +26,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import es.dmoral.toasty.Toasty
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.log
@@ -173,6 +174,16 @@ class ScannerFragment : Fragment() {
         val bleScanSettings = ScanSettings.Builder().setScanMode(
             ScanSettings.SCAN_MODE_LOW_POWER
         ).build()
+
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.BLUETOOTH_SCAN
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Toasty.success(requireContext(), "Need Bluetooth permission", Toast.LENGTH_SHORT, true).show();
+
+            return
+        }
         btScanner!!.startScan(null,bleScanSettings,leScanCallback)
     }
 
@@ -180,6 +191,14 @@ class ScannerFragment : Fragment() {
         tvLog.setText(logContent)
         stopButton.visibility = View.GONE
         startButton.visibility = View.VISIBLE
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.BLUETOOTH_SCAN
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Toasty.success(requireContext(), "Need Bluetooth permission", Toast.LENGTH_SHORT, true).show();
+            return
+        }
         btScanner!!.stopScan(leScanCallback)
     }
 
@@ -245,6 +264,14 @@ class ScannerFragment : Fragment() {
             val scanRecord = result.scanRecord
             val beacon = Beacon(result.device.address)
 
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                Toasty.success(requireContext(), "Need Bluetooth permission", Toast.LENGTH_SHORT, true).show();
+                return
+            }
             beacon.manufacturer = result.device.name
             beacon.rssi = result.rssi
             if (scanRecord != null) {
