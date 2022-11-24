@@ -4,18 +4,27 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.dinkar.blescanner.R
+import com.dinkar.blescanner.WordsApplication
 import com.dinkar.blescanner.ui.areaCard.AreaCardActivity
 import com.dinkar.blescanner.ui.beacon.BeaconActivity
 import com.dinkar.blescanner.ui.dataCollect.DataColloctActivity
 import com.dinkar.blescanner.ui.wifi.ListWifiActivity
+import com.dinkar.blescanner.viewmodels.WordViewModel
+import com.dinkar.blescanner.viewmodels.WordViewModelFactory
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
-
+import com.dinkar.blescanner.data.Word
 
 class HomeActivity : AppCompatActivity(),View.OnClickListener {
+
+    private val wordViewModel: WordViewModel by viewModels {
+        WordViewModelFactory((application as WordsApplication).repository)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +60,9 @@ class HomeActivity : AppCompatActivity(),View.OnClickListener {
     }
 
     override fun onClick(p0: View?) {
+        val word = Word(0,"new insert")
+        wordViewModel.insert(word)
+
         when (p0?.id) {
             R.id.home_bt_beacon -> {
                 val intent1 = Intent(this, BeaconActivity::class.java)
