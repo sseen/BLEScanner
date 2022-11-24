@@ -210,46 +210,8 @@ class ScannerFragment : Fragment() {
             val enableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT)
         }
-        checkForLocationPermission()
     }
 
-    private fun checkForLocationPermission() {
-        // Make sure we have access coarse location enabled, if not, prompt the user to enable it
-        if (requireActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            val builder = AlertDialog.Builder(activity)
-            builder.setTitle("This app needs location access")
-            builder.setMessage("Please grant location access so this app can detect  peripherals.")
-            builder.setPositiveButton(android.R.string.ok, null)
-            builder.setOnDismissListener {
-                requestPermissions(
-                    arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-                    PERMISSION_REQUEST_COARSE_LOCATION
-                )
-            }
-            builder.show()
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>, grantResults: IntArray
-    ) {
-        when (requestCode) {
-            PERMISSION_REQUEST_COARSE_LOCATION -> {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    println("coarse location permission granted")
-                } else {
-                    val builder = AlertDialog.Builder(activity)
-                    builder.setTitle("Functionality limited")
-                    builder.setMessage("Since location access has not been granted, this app will not be able to discover BLE beacons")
-                    builder.setPositiveButton(android.R.string.ok, null)
-                    builder.setOnDismissListener { }
-                    builder.show()
-                }
-                return
-            }
-        }
-    }
 
     private val leScanCallback: ScanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {

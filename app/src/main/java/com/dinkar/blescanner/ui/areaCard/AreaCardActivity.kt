@@ -1,10 +1,22 @@
 package com.dinkar.blescanner.ui.areaCard
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
+import android.bluetooth.le.BluetoothLeScanner
+import android.bluetooth.le.ScanCallback
+import android.bluetooth.le.ScanResult
+import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.wifi.WifiManager
 import android.os.Bundle
+import android.os.ParcelUuid
 import android.text.Html
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -12,13 +24,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.dinkar.blescanner.BaseDetailActivity
-import com.dinkar.blescanner.R
-import com.dinkar.blescanner.UserModel
-import com.dinkar.blescanner.Utils
+import com.dinkar.blescanner.*
 import com.dinkar.blescanner.ui.dataCollect.DataCollectDetailActivity
 import com.google.gson.Gson
 import com.orhanobut.logger.Logger
@@ -29,6 +40,8 @@ import kotlinx.android.synthetic.main.activity_area_card.*
 import sh.tyy.wheelpicker.DayTimePicker
 import sh.tyy.wheelpicker.core.TextWheelAdapter
 import sh.tyy.wheelpicker.core.TextWheelPickerView
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 open class AreaCardActivity : BaseDetailActivity() {
@@ -67,6 +80,61 @@ open class AreaCardActivity : BaseDetailActivity() {
 
     lateinit var courseAdapter:AreaCardAdapter
 
+    private var btManager: BluetoothManager? = null
+    private var btAdapter: BluetoothAdapter? = null
+    private var btScanner: BluetoothLeScanner? = null
+    val eddystoneServiceId: ParcelUuid = ParcelUuid.fromString("0000FEAA-0000-1000-8000-00805F9B34FB")
+    var beaconSet: HashSet<Beacon> = HashSet()
+
+    companion object {
+        private const val REQUEST_ENABLE_BT = 1
+        private const val PERMISSION_REQUEST_COARSE_LOCATION = 1
+    }
+
+    private fun setUpBluetoothManager() {
+        btManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        btAdapter = btManager!!.adapter
+        btScanner = btAdapter?.bluetoothLeScanner
+        if (btAdapter != null && !btAdapter!!.isEnabled) {
+            val enableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            startActivityForResult(enableIntent, AreaCardActivity.REQUEST_ENABLE_BT)
+        }
+        checkForLocationPermission()
+    }
+
+    private fun startScan() {
+        val bleScanSettings = ScanSettings.Builder().setScanMode(
+            ScanSettings.SCAN_MODE_LOW_POWER
+        ).build()
+        if (ActivityCompat.checkSelfPermission(
+                getContext(),
+                Manifest.permission.BLUETOOTH_SCAN
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Toasty.success(getContext(), "Need Bluetooth permission", Toast.LENGTH_SHORT, true).show();
+
+            return
+        }
+        btScanner!!.startScan(null,bleScanSettings,leScanCallback)
+    }
+
+    private fun checkForLocationPermission() {
+        // Make sure we have access coarse location enabled, if not, prompt the user to enable it
+        if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            val builder = AlertDialog.Builder(getContext())
+            builder.setTitle("This app needs location access")
+            builder.setMessage("Please grant location access so this app can detect  peripherals.")
+            builder.setPositiveButton(android.R.string.ok, null)
+            builder.setOnDismissListener {
+                requestPermissions(
+                    arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                    AreaCardActivity.PERMISSION_REQUEST_COARSE_LOCATION
+                )
+            }
+            builder.show()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_area_card)
@@ -91,32 +159,32 @@ open class AreaCardActivity : BaseDetailActivity() {
         courseModelArrayList.add(CourseModel("kitchen 3", 4, 1))
 
         // we are initializing our adapter class and passing our arraylist to it.
-        courseAdapter = AreaCardAdapter(this, courseModelArrayList)
+        courseAdapter = AreaCardAdapter(getContext(), courseModelArrayList)
 
         // below line is for setting a layout manager for our recycler view.
         // here we are creating vertical list so we will provide orientation as vertical
-        val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        val linearLayoutManager = LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false)
 
         // in below two lines we are setting layout-manager and adapter to our recycler view.
         courseRV.layoutManager = linearLayoutManager
         courseRV.adapter = courseAdapter
 
         // Simple Material Dialog
-        val mSimpleDialog = MaterialDialog.Builder(this)
-            .setTitle("保存", TextAlignment.CENTER)
-            .setMessage(Html.fromHtml(R.string.data_collect_title.toString()), TextAlignment.CENTER)
-            .setCancelable(false)
-            .setPositiveButton("保存") { dialogInterface, _ ->
-                dialogInterface.dismiss()
-
-                val intent1 = Intent(applicationContext, DataCollectDetailActivity::class.java)
-                startActivity(intent1)
-            }
-            .setNegativeButton("キャンセル") { dialogInterface, _ ->
-                dialogInterface.dismiss()
-                finish()
-            }
-            .build()
+//        val mSimpleDialog = MaterialDialog.Builder(this)
+//            .setTitle("保存", TextAlignment.CENTER)
+//            .setMessage(Html.fromHtml(R.string.data_collect_title.toString()), TextAlignment.CENTER)
+//            .setCancelable(false)
+//            .setPositiveButton("保存") { dialogInterface, _ ->
+//                dialogInterface.dismiss()
+//
+//                val intent1 = Intent(applicationContext, DataCollectDetailActivity::class.java)
+//                startActivity(intent1)
+//            }
+//            .setNegativeButton("キャンセル") { dialogInterface, _ ->
+//                dialogInterface.dismiss()
+//                finish()
+//            }
+//            .build()
 
         // buttons control
         idBt_DataCollect_finish.setOnClickListener {
@@ -135,6 +203,7 @@ open class AreaCardActivity : BaseDetailActivity() {
         // click cell selection
         courseAdapter.setOnItemShortClickListener(object : AreaCardAdapter.OnItemClickListener {
             override fun onItemLongClick(view: View?, pos: Int) {
+                startScan()
                 if (courseAdapter.selIndex != -1) {
                     if (courseAdapter.selIndex == pos) {
                         courseAdapter.selIndex = pos
@@ -177,6 +246,127 @@ open class AreaCardActivity : BaseDetailActivity() {
                 }
             }
         })
+
+        setUpBluetoothManager()
+
+    }
+
+    open fun getContext(): Context {
+        return this.applicationContext
+    }
+
+
+    private val leScanCallback: ScanCallback = object : ScanCallback() {
+        override fun onScanResult(callbackType: Int, result: ScanResult) {
+
+            // measureFps.AddRecord(true);
+
+            val wifiManager =
+                getContext().getSystemService(WIFI_SERVICE) as WifiManager
+            val numberOfLevels = 5
+            val wifiInfo = wifiManager.connectionInfo
+
+            val scanRecord = result.scanRecord
+            val beacon = Beacon(result.device.address)
+
+            if (ActivityCompat.checkSelfPermission(
+                    getContext(),
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                Toasty.success(getContext(), "Need Bluetooth permission", Toast.LENGTH_SHORT, true).show();
+                return
+            }
+            beacon.manufacturer = result.device.name
+            beacon.rssi = result.rssi
+            if (scanRecord != null) {
+                val serviceUuids = scanRecord.serviceUuids
+                val iBeaconManufactureData = scanRecord.getManufacturerSpecificData(0X004c)
+                if (serviceUuids != null && serviceUuids.size > 0 && serviceUuids.contains(
+                        eddystoneServiceId
+                    )
+                ) {
+                    val serviceData = scanRecord.getServiceData(eddystoneServiceId)
+                    if (serviceData != null && serviceData.size > 18) {
+                        val eddystoneUUID =
+                            Utils.toHexString(Arrays.copyOfRange(serviceData, 2, 18))
+                        val namespace = String(eddystoneUUID.toCharArray().sliceArray(0..19))
+                        val instance = String(
+                            eddystoneUUID.toCharArray()
+                                .sliceArray(20 until eddystoneUUID.toCharArray().size)
+                        )
+                        beacon.type = Beacon.beaconType.eddystoneUID
+                        beacon.namespace = namespace
+                        beacon.instance = instance
+
+                        Log.e("DINKAR", "Namespace:$namespace Instance:$instance")
+                    }
+                }
+                if (iBeaconManufactureData != null && iBeaconManufactureData.size >= 23) {
+                    val iBeaconUUID = Utils.toHexString(iBeaconManufactureData.copyOfRange(2, 18))
+                    val major = Integer.parseInt(
+                        Utils.toHexString(
+                            iBeaconManufactureData.copyOfRange(
+                                18,
+                                20
+                            )
+                        ), 16
+                    )
+                    val minor = Integer.parseInt(
+                        Utils.toHexString(
+                            iBeaconManufactureData.copyOfRange(
+                                20,
+                                22
+                            )
+                        ), 16
+                    )
+                    beacon.type = Beacon.beaconType.iBeacon
+                    beacon.uuid = iBeaconUUID
+                    beacon.major = major
+                    beacon.minor = minor
+                    val date = Calendar.getInstance().time
+                    val dateInString = date.toString("yyyy/MM/dd HH:mm:ss.SSS")
+
+//                     if (iBeaconUUID.equals("E2C56DB5DFFB48D2B060D0F5A71096E0"))
+                         Log.e("DINKAR", "${beaconSet.contains(beacon)} $dateInString UUID:$iBeaconUUID major:$major minor:$minor RSSI:${result.rssi} wifi:${wifiInfo.rssi}")
+
+                    //logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor RSSI:${result.rssi}\n"
+
+//                    when (beaconTypePositionSelected) {
+//                        0 -> {
+//                            logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor RSSI:${result.rssi}\n$dateInString Wifi SSID:${wifiInfo.ssid} BSSID:${wifiInfo.ssid} RSSI:${wifiRssi}\n"
+//                            beaconSet.add(beacon)
+//                            beaconList.add(beacon)
+//                        }
+//                        1 -> {
+//                            logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor RSSI:${result.rssi}\n"
+//                            beaconSet.add(beacon)
+//                            beaconList.add(beacon)
+//                        }
+//                        else -> {
+//                            logContent += "$dateInString Wifi SSID:${wifiInfo.ssid} BSSID:${wifiInfo.bssid} RSSI:${wifiInfo.rssi}\n"
+//                            beacon.uuid = wifiInfo.ssid
+//                            beacon.type = Beacon.beaconType.eddystoneUID
+//                            beacon.rssi = wifiInfo.rssi
+//                            Log.v("wifi","beacon ${beacon.rssi}")
+//                            beaconSet.add(beacon)
+//                            beaconList.add(beacon)
+//                        }
+//                    }
+                }
+            }
+
+//            (recyclerView.adapter as BeaconsAdapter).updateData(beaconList,beaconTypePositionSelected)
+        }
+
+        fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
+            val formatter = SimpleDateFormat(format, locale)
+            return formatter.format(this)
+        }
+
+        override fun onScanFailed(errorCode: Int) {
+            Log.e("DINKAR", errorCode.toString())
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
