@@ -58,18 +58,23 @@ class One {
                 if (curCSV != null) {
                     while (curCSV.moveToNext()) {
                         @SuppressLint("Range")
-                        val date = curCSV.getLong(curCSV.getColumnIndex("date"))
-                        val title = curCSV.getString(curCSV.getColumnIndex("title"))
-                        val amount = curCSV.getFloat(curCSV.getColumnIndex("amount"))
-                        val description = curCSV.getString(curCSV.getColumnIndex("description"))
+                        val sTime = curCSV.getLong(curCSV.getColumnIndex("time(ms)"))
+                        val areaName = curCSV.getString(curCSV.getColumnIndex("areaname"))
+                        val dBm = curCSV.getFloat(curCSV.getColumnIndex("dBm"))
+                        val setting_facilities = curCSV.getString(curCSV.getColumnIndex("setting_facilities"))
+                        val setting_name = curCSV.getString(curCSV.getColumnIndex("setting_name"))
+                        val setting_note = curCSV.getString(curCSV.getColumnIndex("setting_note"))
+                        val data = curCSV.getString(curCSV.getColumnIndex("data"))
+                        val bleWifi = curCSV.getString(curCSV.getColumnIndex("BLE/Wifi"))
 
                         /**Create the line to write in the .csv file.
                          * We need a String where values are comma separated.
                          * The field date (Long) is formatted in a readable text. The amount field
                          * is converted into String.
                          */
-                        val record =
-                            df.format(Date(date)) + "," + title + "," + amount + "," + description
+                        val record = "$sTime" + "," + areaName + "," + "$dBm" + "," +
+                                setting_facilities + "," + setting_name + "," + setting_note + "," +
+                                data + "," + bleWifi
                         printWriter.println(record) //write the record in the .csv file
                     }
                 }
