@@ -21,11 +21,6 @@ import com.dinkar.blescanner.data.Word
 
 class HomeActivity : AppCompatActivity(),View.OnClickListener {
 
-    private val wordViewModel: WordViewModel by viewModels {
-        WordViewModelFactory((application as WordsApplication).repository)
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -60,8 +55,6 @@ class HomeActivity : AppCompatActivity(),View.OnClickListener {
     }
 
     override fun onClick(p0: View?) {
-        val word = Word(0,"new insert")
-        wordViewModel.insert(word)
 
         when (p0?.id) {
             R.id.home_bt_beacon -> {

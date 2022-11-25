@@ -100,21 +100,10 @@ open class AreaCardActivity : BaseDetailActivity() {
             startActivityForResult(enableIntent, AreaCardActivity.REQUEST_ENABLE_BT)
         }
         checkForLocationPermission()
-    }
 
-    private fun startScan() {
         val bleScanSettings = ScanSettings.Builder().setScanMode(
             ScanSettings.SCAN_MODE_LOW_POWER
         ).build()
-        if (ActivityCompat.checkSelfPermission(
-                getContext(),
-                Manifest.permission.BLUETOOTH_SCAN
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            Toasty.success(getContext(), "Need Bluetooth permission", Toast.LENGTH_SHORT, true).show();
-
-            return
-        }
         btScanner!!.startScan(null,bleScanSettings,leScanCallback)
     }
 
@@ -169,23 +158,6 @@ open class AreaCardActivity : BaseDetailActivity() {
         courseRV.layoutManager = linearLayoutManager
         courseRV.adapter = courseAdapter
 
-        // Simple Material Dialog
-//        val mSimpleDialog = MaterialDialog.Builder(this)
-//            .setTitle("保存", TextAlignment.CENTER)
-//            .setMessage(Html.fromHtml(R.string.data_collect_title.toString()), TextAlignment.CENTER)
-//            .setCancelable(false)
-//            .setPositiveButton("保存") { dialogInterface, _ ->
-//                dialogInterface.dismiss()
-//
-//                val intent1 = Intent(applicationContext, DataCollectDetailActivity::class.java)
-//                startActivity(intent1)
-//            }
-//            .setNegativeButton("キャンセル") { dialogInterface, _ ->
-//                dialogInterface.dismiss()
-//                finish()
-//            }
-//            .build()
-
         // buttons control
         idBt_DataCollect_finish.setOnClickListener {
             idBt_DataCollect_save.isEnabled = true
@@ -203,13 +175,16 @@ open class AreaCardActivity : BaseDetailActivity() {
         // click cell selection
         courseAdapter.setOnItemShortClickListener(object : AreaCardAdapter.OnItemClickListener {
             override fun onItemLongClick(view: View?, pos: Int) {
-                startScan()
+
                 if (courseAdapter.selIndex != -1) {
+                    // stop
                     if (courseAdapter.selIndex == pos) {
                         courseAdapter.selIndex = pos
                         courseAdapter.notifyItemChanged(pos)
                     }
                 } else {
+                    // start
+                    setUpBluetoothManager()
                     courseAdapter.selIndex = pos
                     courseAdapter.notifyItemChanged(pos)
                 }
@@ -246,9 +221,6 @@ open class AreaCardActivity : BaseDetailActivity() {
                 }
             }
         })
-
-        setUpBluetoothManager()
-
     }
 
     open fun getContext(): Context {

@@ -11,3 +11,11 @@ class Word(
     @ColumnInfo(name = "word") val word: String
 
 )
+
+@Entity(tableName = "data_history_table")
+class DataHistory(
+
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    @ColumnInfo(name = "word") val word: String
+
+)
