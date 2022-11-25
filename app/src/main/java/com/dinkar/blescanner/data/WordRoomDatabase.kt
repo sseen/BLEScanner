@@ -27,7 +27,7 @@ public abstract class WordRoomDatabase : RoomDatabase() {
             // if it is, then create the database
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
-                    context.applicationContext,
+                    context,
                     WordRoomDatabase::class.java,
                     "word_database"
                 )
@@ -38,6 +38,10 @@ public abstract class WordRoomDatabase : RoomDatabase() {
                 instance
             }
 
+        }
+
+        fun getSQliteDB(): WordRoomDatabase? {
+            return INSTANCE
         }
     }
 

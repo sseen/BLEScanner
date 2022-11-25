@@ -4,10 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
-import com.dinkar.blescanner.BaseDetailActivity
-import com.dinkar.blescanner.R
-import com.dinkar.blescanner.UserModel
-import com.dinkar.blescanner.Utils
+import com.dinkar.blescanner.*
 import com.dinkar.blescanner.ui.main.HomeActivity
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_data_collect_detail.*
@@ -36,8 +33,12 @@ class DataCollectDetailActivity : BaseDetailActivity() {
             finish()
         }
         idBt_DataCollect_done.setOnClickListener {
+            One().exportDatabase()
+
             val intent1 = Intent(this, HomeActivity::class.java)
             startActivity(intent1)
         }
     }
+
+
 }

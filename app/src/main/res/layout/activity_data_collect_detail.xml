@@ -42,7 +42,7 @@ tools:context=".ui.dataCollect.DataCollectDetailActivity">
         android:text="@string/button_yes"
         android:textSize="20sp"
         app:strokeColor="@color/black"
-        app:cornerRadius="35dp"
+        app:cornerRadius="15dp"
     />
 
     <com.google.android.material.button.MaterialButton
@@ -53,7 +53,7 @@ tools:context=".ui.dataCollect.DataCollectDetailActivity">
         android:text="@string/button_no"
         android:textSize="20sp"
         app:strokeColor="@color/black"
-        app:cornerRadius="35dp"
+        app:cornerRadius="15dp"
         />
 
 </com.google.android.flexbox.FlexboxLayout>
