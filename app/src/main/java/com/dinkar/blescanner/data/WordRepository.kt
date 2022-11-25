@@ -25,4 +25,10 @@ class WordRepository(private val wordDao: WordDao) {
     suspend fun insertAll(words: List<Word>) {
         wordDao.insertAll(words)
     }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun insertHistoryAll(words: List<DtHistory>) {
+        wordDao.insertBatchAll(words)
+    }
 }

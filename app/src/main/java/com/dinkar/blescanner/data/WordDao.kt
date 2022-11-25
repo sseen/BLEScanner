@@ -18,7 +18,9 @@ interface WordDao {
     @Query("DELETE FROM word_table")
     suspend fun deleteAll()
 
-
     @Insert
     suspend fun insertAll(users: List<Word>)
+
+    @Insert
+    suspend fun insertBatchAll(users: List<DtHistory>)
 }

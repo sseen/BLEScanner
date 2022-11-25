@@ -12,10 +12,17 @@ class Word(
 
 )
 
-@Entity(tableName = "data_history_table")
-class DataHistory(
+@Entity(tableName = "dt_history_table")
+class DtHistory(
 
     @PrimaryKey(autoGenerate = true) val id: Int,
-    @ColumnInfo(name = "word") val word: String
-
+    val areaname: String,
+    val setting_facilities: String,
+    val dBm: Int,
+    @ColumnInfo(name = "time(ms)") val times: Int,
+    val setting_name: String,
+    val setting_note: String,
+    @ColumnInfo(name = "data") val datas: String,
+    @ColumnInfo(name = "BLE/Wifi") val ids: String,
+    val type: Int, // 0 beacon 1 wifi
 )

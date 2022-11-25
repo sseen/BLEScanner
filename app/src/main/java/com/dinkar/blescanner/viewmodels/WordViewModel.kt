@@ -1,6 +1,7 @@
 package com.dinkar.blescanner.viewmodels
 
 import androidx.lifecycle.*
+import com.dinkar.blescanner.data.DtHistory
 import com.dinkar.blescanner.data.Word
 import com.dinkar.blescanner.data.WordRepository
 import kotlinx.coroutines.launch
@@ -22,6 +23,10 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
 
     fun insertAll(words: List<Word>) = viewModelScope.launch {
         repository.insertAll(words)
+    }
+
+    fun insertHistoryAll(words: List<DtHistory>) = viewModelScope.launch {
+        repository.insertHistoryAll(words)
     }
 }
 

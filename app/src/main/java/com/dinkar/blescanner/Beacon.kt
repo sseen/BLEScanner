@@ -1,5 +1,7 @@
 package com.dinkar.blescanner
 
+import java.util.Date
+
 
 class Beacon(mac: String?) {
     enum class beaconType {
@@ -15,6 +17,8 @@ class Beacon(mac: String?) {
     var namespace: String? = null
     var instance: String? = null
     var rssi: Int? = null
+    var date:Date? = null
+    var dateStr:String? = null
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Beacon) return false

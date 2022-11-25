@@ -22,6 +22,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
@@ -30,7 +31,10 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dinkar.blescanner.*
+import com.dinkar.blescanner.data.DtHistory
 import com.dinkar.blescanner.ui.dataCollect.DataCollectDetailActivity
+import com.dinkar.blescanner.viewmodels.WordViewModel
+import com.dinkar.blescanner.viewmodels.WordViewModelFactory
 import com.google.gson.Gson
 import com.orhanobut.logger.Logger
 import dev.shreyaspatil.MaterialDialog.MaterialDialog
@@ -45,6 +49,12 @@ import java.util.*
 
 
 open class AreaCardActivity : BaseDetailActivity() {
+
+    private val wordViewModel: WordViewModel by viewModels {
+        WordViewModelFactory((application as WordsApplication).repository)
+    }
+    private lateinit var previousDate: Date
+
 
     // Here, we have created new array list and added data to it
     val courseModelArrayList: ArrayList<CourseModel> = ArrayList()
@@ -85,6 +95,8 @@ open class AreaCardActivity : BaseDetailActivity() {
     private var btScanner: BluetoothLeScanner? = null
     val eddystoneServiceId: ParcelUuid = ParcelUuid.fromString("0000FEAA-0000-1000-8000-00805F9B34FB")
     var beaconSet: HashSet<Beacon> = HashSet()
+    var beaconList: MutableList<Beacon> = mutableListOf()
+    var beaconListBK: MutableList<DtHistory> = mutableListOf()
 
     companion object {
         private const val REQUEST_ENABLE_BT = 1
@@ -181,6 +193,10 @@ open class AreaCardActivity : BaseDetailActivity() {
                     if (courseAdapter.selIndex == pos) {
                         courseAdapter.selIndex = pos
                         courseAdapter.notifyItemChanged(pos)
+
+                        btScanner!!.stopScan(leScanCallback)
+                        saveToDB(beaconList)
+                        beaconList.clear()
                     }
                 } else {
                     // start
@@ -229,6 +245,7 @@ open class AreaCardActivity : BaseDetailActivity() {
 
 
     private val leScanCallback: ScanCallback = object : ScanCallback() {
+        @SuppressLint("SuspiciousIndentation")
         override fun onScanResult(callbackType: Int, result: ScanResult) {
 
             // measureFps.AddRecord(true);
@@ -296,39 +313,27 @@ open class AreaCardActivity : BaseDetailActivity() {
                     beacon.uuid = iBeaconUUID
                     beacon.major = major
                     beacon.minor = minor
+
                     val date = Calendar.getInstance().time
-                    val dateInString = date.toString("yyyy/MM/dd HH:mm:ss.SSS")
+                    val dateInString = date.toString("yyyy_MM_dd_HH_mm_ss_SSS")
+                    if (!::previousDate.isInitialized) {
+                        previousDate = date
+                    }
+                    beacon.date = date
+                    beacon.dateStr = dateInString
 
 //                     if (iBeaconUUID.equals("E2C56DB5DFFB48D2B060D0F5A71096E0"))
                          Log.e("DINKAR", "${beaconSet.contains(beacon)} $dateInString UUID:$iBeaconUUID major:$major minor:$minor RSSI:${result.rssi} wifi:${wifiInfo.rssi}")
 
-                    //logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor RSSI:${result.rssi}\n"
+                    beaconSet.add(beacon)
+                    beaconList.add(beacon)
 
-//                    when (beaconTypePositionSelected) {
-//                        0 -> {
-//                            logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor RSSI:${result.rssi}\n$dateInString Wifi SSID:${wifiInfo.ssid} BSSID:${wifiInfo.ssid} RSSI:${wifiRssi}\n"
-//                            beaconSet.add(beacon)
-//                            beaconList.add(beacon)
-//                        }
-//                        1 -> {
-//                            logContent += "$dateInString UUID:$iBeaconUUID major:$major minor:$minor RSSI:${result.rssi}\n"
-//                            beaconSet.add(beacon)
-//                            beaconList.add(beacon)
-//                        }
-//                        else -> {
-//                            logContent += "$dateInString Wifi SSID:${wifiInfo.ssid} BSSID:${wifiInfo.bssid} RSSI:${wifiInfo.rssi}\n"
-//                            beacon.uuid = wifiInfo.ssid
-//                            beacon.type = Beacon.beaconType.eddystoneUID
-//                            beacon.rssi = wifiInfo.rssi
-//                            Log.v("wifi","beacon ${beacon.rssi}")
-//                            beaconSet.add(beacon)
-//                            beaconList.add(beacon)
-//                        }
-//                    }
+                    if (beaconList.count() > 20) {
+                        saveToDB(beaconList)
+                        beaconList.clear()
+                    }
                 }
             }
-
-//            (recyclerView.adapter as BeaconsAdapter).updateData(beaconList,beaconTypePositionSelected)
         }
 
         fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
@@ -339,6 +344,30 @@ open class AreaCardActivity : BaseDetailActivity() {
         override fun onScanFailed(errorCode: Int) {
             Log.e("DINKAR", errorCode.toString())
         }
+    }
+
+    private fun saveToDB(result: List<Beacon>) {
+        var arr = mutableListOf<DtHistory>()
+        for (one in result) {
+            val sid = one.uuid ?: ""
+            val datas = one.dateStr ?: ""
+            val times = one.date?.time?.minus(previousDate.time)
+            previousDate = one.date!!
+            val dt = times?.let {
+                DtHistory(
+                    0, "an",
+                    "fc", one.rssi ?: 0,
+                    it.toInt(), "user",
+                    "other", datas,
+                    sid, 1
+                )
+            }
+            if (dt != null) {
+                arr.add(dt)
+            }
+        }
+
+        wordViewModel.insertHistoryAll(arr)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
