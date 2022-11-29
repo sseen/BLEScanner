@@ -11,8 +11,6 @@ import java.util.*
 
 class One {
 
-
-
     @SuppressLint("Range")
     public fun exportDatabase(): Boolean {
         val df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault())

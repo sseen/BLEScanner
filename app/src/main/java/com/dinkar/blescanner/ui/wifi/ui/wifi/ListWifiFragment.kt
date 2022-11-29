@@ -19,7 +19,7 @@ import com.dinkar.blescanner.ui.wifi.MSArrayAdapter
 
 class ListWifiFragment : Fragment() {
     private lateinit var binding: FragmentListWifiBinding
-    var wifiLists: Array<String> = arrayOf()
+    var wifiLists: MutableList<String> = mutableListOf()
     lateinit var adapter:MSArrayAdapter
 
     companion object {
@@ -40,7 +40,7 @@ class ListWifiFragment : Fragment() {
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
         requireContext().registerReceiver(wifiScanReceiver, intentFilter)
 
-//        startScanWifis()
+        startScanWifis()
     }
 
     private fun scanSuccess() {
@@ -56,8 +56,10 @@ class ListWifiFragment : Fragment() {
     }
 
     private fun startScanWifis() {
-        val wifiManager = context?.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        wifiManager.startScan()
+        if (context != null) {
+            val wifiManager = context?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            wifiManager.startScan()
+        }
     }
 
     val wifiScanReceiver = object : BroadcastReceiver() {
@@ -71,9 +73,10 @@ class ListWifiFragment : Fragment() {
                     Log.e("wifi scan", "${wifiManager.scanResults.first().level}")
                     var slist = mutableListOf<String>()
                     for (one in wifiManager.scanResults) {
-                        slist.add(one.SSID)
+                        slist.add(one.SSID + " （${one.level}）")
                     }
-                    wifiLists = slist.toTypedArray()
+                    wifiLists.clear()
+                    wifiLists.addAll(slist)
                     adapter.notifyDataSetChanged()
                 }
                 else

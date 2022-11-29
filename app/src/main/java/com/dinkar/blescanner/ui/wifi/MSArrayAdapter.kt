@@ -6,7 +6,7 @@ import android.widget.ArrayAdapter
  class MSArrayAdapter(
     context: Context?,
     textViewResourceId: Int,
-    target: Array<String>
+    target: List<String>
 ) :
     ArrayAdapter<String>(context!!, textViewResourceId, target) {
 
