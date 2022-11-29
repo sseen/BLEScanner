@@ -98,6 +98,8 @@ open class AreaCardActivity : BaseDetailActivity() {
     var beaconList: MutableList<Beacon> = mutableListOf()
     var beaconListBK: MutableList<DtHistory> = mutableListOf()
 
+    private lateinit var  myUser:UserModel
+
     companion object {
         private const val REQUEST_ENABLE_BT = 1
         private const val PERMISSION_REQUEST_COARSE_LOCATION = 1
@@ -141,10 +143,11 @@ open class AreaCardActivity : BaseDetailActivity() {
         setContentView(R.layout.activity_area_card)
         setTitle(R.string.home_bt_location)
 
+        myUser = UserModel("device", "user","id")
         val mPrefs =  getSharedPreferences(Utils.share_pre, Context.MODE_PRIVATE)
         val gson = Gson()
         val json = mPrefs.getString(Utils.user, "")
-        val myUser = gson.fromJson(json, UserModel::class.java)
+        myUser = gson.fromJson(json, UserModel::class.java)
 
         if (myUser != null) {
             val lblTitle = findViewById<TextView>(R.id.idTVDeviceUser)
@@ -355,10 +358,10 @@ open class AreaCardActivity : BaseDetailActivity() {
             previousDate = one.date!!
             val dt = times?.let {
                 DtHistory(
-                    0, "an",
+                    0, myUser.device,
                     "fc", one.rssi ?: 0,
-                    it.toInt(), "user",
-                    "other", datas,
+                    it.toInt(), myUser.userName,
+                    myUser.idStr, datas,
                     sid, 1
                 )
             }

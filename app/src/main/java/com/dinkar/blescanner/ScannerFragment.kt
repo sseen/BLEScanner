@@ -149,11 +149,17 @@ class ScannerFragment : Fragment() {
 
         override fun onReceive(context: Context, intent: Intent) {
             val success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
+            Log.e("wifi scan","wifi scan received")
             if (success) {
                 val wifiManager = context?.getSystemService(Context.WIFI_SERVICE) as WifiManager
-                Log.e("wifi scan","${wifiManager.scanResults.first().level}")
+                if (wifiManager.scanResults.isEmpty()) {
+                    Log.e("wifi scan","wifi list empty")
+                }
+                else
+                    Log.e("wifi scan","${wifiManager.scanResults.first().level}")
                 scanSuccess()
             } else {
+                Log.e("wifi scan","scan wifi error")
                 scanFailure()
             }
         }
