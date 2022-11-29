@@ -1,10 +1,14 @@
 package com.dinkar.blescanner
 
 import android.app.Application
+import android.os.Handler
+import android.os.Looper
 import com.dinkar.blescanner.data.WordRepository
 import com.dinkar.blescanner.data.WordRoomDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import java.util.concurrent.Executors
+
 
 class WordsApplication : Application() {
     // No need to cancel this scope as it'll be torn down with the process
@@ -17,6 +21,16 @@ class WordsApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        repository
+
+//        repository
+//        Executors.newSingleThreadExecutor().execute {
+//            repository
+//            val mainHandler = Handler(Looper.getMainLooper())
+//
+//            mainHandler.post {
+//                repository
+//            }
+//        }
+
     }
 }

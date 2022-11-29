@@ -28,9 +28,12 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.isVisible
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dinkar.blescanner.*
+import com.dinkar.blescanner.data.DtArea
 import com.dinkar.blescanner.data.DtHistory
 import com.dinkar.blescanner.ui.dataCollect.DataCollectDetailActivity
 import com.dinkar.blescanner.viewmodels.WordViewModel
@@ -41,6 +44,8 @@ import dev.shreyaspatil.MaterialDialog.MaterialDialog
 import dev.shreyaspatil.MaterialDialog.model.TextAlignment
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_area_card.*
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import sh.tyy.wheelpicker.DayTimePicker
 import sh.tyy.wheelpicker.core.TextWheelAdapter
 import sh.tyy.wheelpicker.core.TextWheelPickerView
@@ -48,7 +53,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-open class AreaCardActivity : BaseDetailActivity() {
+open class AreaCardActivity: BaseDetailActivity() {
 
     private val wordViewModel: WordViewModel by viewModels {
         WordViewModelFactory((application as WordsApplication).repository)
@@ -138,6 +143,9 @@ open class AreaCardActivity : BaseDetailActivity() {
         }
     }
 
+    suspend fun <T> Flow<List<T>>.flattenToList() =
+        flatMapConcat { it.asFlow() }.toList()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_area_card)
@@ -161,7 +169,6 @@ open class AreaCardActivity : BaseDetailActivity() {
         courseModelArrayList.add(CourseModel("living room 1", 4, 1))
         courseModelArrayList.add(CourseModel("bed room 2", 3, 1))
         courseModelArrayList.add(CourseModel("kitchen 3", 4, 1))
-
         // we are initializing our adapter class and passing our arraylist to it.
         courseAdapter = AreaCardAdapter(getContext(), courseModelArrayList)
 
@@ -172,6 +179,16 @@ open class AreaCardActivity : BaseDetailActivity() {
         // in below two lines we are setting layout-manager and adapter to our recycler view.
         courseRV.layoutManager = linearLayoutManager
         courseRV.adapter = courseAdapter
+
+//        wordViewModel.allAreas.asFlow().collect {
+//            it.forEach {
+//                val model = CourseModel(it.areaname, 4, 1)
+//                courseModelArrayList.add(model)
+//            }
+//        }
+
+        // wordViewModel.allAreas
+
 
         // bottom buttons control
         idBt_DataCollect_finish.setOnClickListener {
@@ -427,6 +444,11 @@ open class AreaCardActivity : BaseDetailActivity() {
             val pickerView = picker.pickerView ?: return@setOnClickOkButtonListener
             selRoomIdx = pickerView.day
             selRoomNumberIdx = pickerView.hour
+
+            var room = roomIndexList[selRoomIdx-1]
+            var index = roomNumberList[selRoomNumberIdx].text
+            wordViewModel.insertArea(DtArea(0, room + "_" + index))
+            courseAdapter.notifyDataSetChanged()
 
             Logger.d("ok")
             picker.hide()

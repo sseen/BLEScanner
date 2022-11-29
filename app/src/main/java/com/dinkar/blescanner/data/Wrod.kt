@@ -26,3 +26,10 @@ class DtHistory(
     @ColumnInfo(name = "BLE/Wifi") val ids: String,
     val type: Int, // 0 beacon 1 wifi
 )
+
+@Entity(tableName = "dt_area_table")
+class DtArea(
+
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    val areaname: String,
+)

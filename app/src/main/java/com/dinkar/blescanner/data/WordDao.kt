@@ -23,4 +23,16 @@ interface WordDao {
 
     @Insert
     suspend fun insertBatchAll(users: List<DtHistory>)
+
+    @Insert
+    suspend fun insertArea(area: DtArea)
+
+    @Query("DELETE FROM dt_area_table WHERE areaname = :areaName")
+    fun deleteByAreaName(areaName: String)
+
+    @Query("SELECT * FROM dt_area_table ORDER BY areaname ASC")
+    fun getAlphabetizedAreas(): Flow<List<DtArea>>
+
+    @Query("SELECT * FROM dt_area_table ORDER BY areaname ASC")
+    fun getAlphabetizedAreasNoflow(): List<DtArea>
 }

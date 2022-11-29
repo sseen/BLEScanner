@@ -9,7 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 // Annotates class to be a Room Database with a table (entity) of the Word class
-@Database(entities = arrayOf(Word::class, DtHistory::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(Word::class, DtHistory::class, DtArea::class), version = 1, exportSchema = false)
 public abstract class WordRoomDatabase : RoomDatabase() {
 
     abstract fun wordDao(): WordDao

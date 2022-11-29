@@ -1,6 +1,7 @@
 package com.dinkar.blescanner.viewmodels
 
 import androidx.lifecycle.*
+import com.dinkar.blescanner.data.DtArea
 import com.dinkar.blescanner.data.DtHistory
 import com.dinkar.blescanner.data.Word
 import com.dinkar.blescanner.data.WordRepository
@@ -13,6 +14,7 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
     //   the UI when the data actually changes.
     // - Repository is completely separated from the UI through the ViewModel.
     val allWords: LiveData<List<Word>> = repository.allWords.asLiveData()
+    val allAreas: LiveData<List<DtArea>> = repository.allAreas.asLiveData()
 
     /**
      * Launching a new coroutine to insert the data in a non-blocking way
@@ -28,6 +30,15 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
     fun insertHistoryAll(words: List<DtHistory>) = viewModelScope.launch {
         repository.insertHistoryAll(words)
     }
+
+    fun insertArea(area: DtArea) = viewModelScope.launch {
+        repository.insertArea(area)
+    }
+
+    fun delArea(areaname: String) = viewModelScope.launch {
+        repository.delArea(areaname)
+    }
+
 }
 
 class WordViewModelFactory(private val repository: WordRepository) : ViewModelProvider.Factory {
