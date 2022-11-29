@@ -1,14 +1,11 @@
 package com.dinkar.blescanner
 
-import android.database.sqlite.SQLiteDatabase
 import android.annotation.SuppressLint
 import android.os.Environment
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.dinkar.blescanner.data.WordRoomDatabase
 import java.io.File
 import java.io.FileWriter
 import java.io.PrintWriter
-import java.lang.Exception
 import java.text.DateFormat
 import java.util.*
 
@@ -29,8 +26,13 @@ class One {
             false
         } else {
             //We use the Download directory for saving our .csv file.
-            val exportDir =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+//            val exportDir =
+//                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            val exportDir = File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).path +
+                        File.separator + "BLE scanner"
+            )
+
             if (!exportDir.exists()) {
                 exportDir.mkdirs()
             }

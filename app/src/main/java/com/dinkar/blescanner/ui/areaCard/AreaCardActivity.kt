@@ -173,7 +173,7 @@ open class AreaCardActivity : BaseDetailActivity() {
         courseRV.layoutManager = linearLayoutManager
         courseRV.adapter = courseAdapter
 
-        // buttons control
+        // bottom buttons control
         idBt_DataCollect_finish.setOnClickListener {
             idBt_DataCollect_save.isEnabled = true
             courseAdapter.previousSelIndex = courseAdapter.nowSelIndex
