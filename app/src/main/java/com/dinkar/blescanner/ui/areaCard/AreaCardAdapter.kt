@@ -3,6 +3,8 @@ package com.dinkar.blescanner.ui.areaCard
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import android.os.Parcel
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +13,16 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.dinkar.blescanner.R
+import com.dinkar.blescanner.data.DtArea
 
-class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayList<CourseModel>) :
-    RecyclerView.Adapter<AreaCardAdapter.ViewHolder>() {
+class AreaCardAdapter(private val context: Context) :
+    ListAdapter<DtArea, AreaCardAdapter.ViewHolder>(WordsComparator()) {
 
-    private val courseModelArrayList: ArrayList<CourseModel>
+   // private val courseModelArrayList: ArrayList<CourseModel>
 
     var previousSelIndex = -1
     var nowSelIndex = -1
@@ -34,8 +39,8 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // to set data to textview and imageview of each card layout
-        val model: CourseModel = courseModelArrayList[position]
-        holder.tvTitle.text = model.getCourse_name()
+        val model: DtArea = getItem(position)
+        holder.tvTitle.text = model.areaname
 
         if (isTeacherData) {
             // 教师数据收集
@@ -79,10 +84,10 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
         }
     }
 
-    override fun getItemCount(): Int {
-        // this method is used for showing number of card items in recycler view.
-        return courseModelArrayList.size
-    }
+//    override fun getItemCount(): Int {
+//        // this method is used for showing number of card items in recycler view.
+//        return courseModelArrayList.size
+//    }
 
     // View holder class for initializing of your views such as TextView and Imageview.
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -100,12 +105,13 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
 
     // Constructor
     init {
-        this.courseModelArrayList = courseModelArrayList
+        //this.courseModelArrayList = courseModelArrayList
     }
 
     // add long press listener
     private var onItemClickListener: OnItemClickListener? = null
     private var onItemShortClickListener: OnItemClickListener? = null
+
 
     interface OnItemClickListener {
         fun onItemLongClick(view: View?, pos: Int)
@@ -118,4 +124,15 @@ class AreaCardAdapter(private val context: Context, courseModelArrayList: ArrayL
     fun setOnItemShortClickListener(onItemClickListener: OnItemClickListener) {
         this.onItemShortClickListener = onItemClickListener
     }
+
+    class WordsComparator : DiffUtil.ItemCallback<DtArea>() {
+        override fun areItemsTheSame(oldItem: DtArea, newItem: DtArea): Boolean {
+            return oldItem === newItem
+        }
+
+        override fun areContentsTheSame(oldItem: DtArea, newItem: DtArea): Boolean {
+            return oldItem.areaname == newItem.areaname
+        }
+    }
+
 }

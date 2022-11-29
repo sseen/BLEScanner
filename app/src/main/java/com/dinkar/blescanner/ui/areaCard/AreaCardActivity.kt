@@ -166,11 +166,11 @@ open class AreaCardActivity: BaseDetailActivity() {
 
         val courseRV = findViewById<RecyclerView>(R.id.idRVArea)
 
-        courseModelArrayList.add(CourseModel("living room 1", 4, 1))
-        courseModelArrayList.add(CourseModel("bed room 2", 3, 1))
-        courseModelArrayList.add(CourseModel("kitchen 3", 4, 1))
+//        courseModelArrayList.add(CourseModel("living room 1", 4, 1))
+//        courseModelArrayList.add(CourseModel("bed room 2", 3, 1))
+//        courseModelArrayList.add(CourseModel("kitchen 3", 4, 1))
         // we are initializing our adapter class and passing our arraylist to it.
-        courseAdapter = AreaCardAdapter(getContext(), courseModelArrayList)
+        courseAdapter = AreaCardAdapter(getContext())
 
         // below line is for setting a layout manager for our recycler view.
         // here we are creating vertical list so we will provide orientation as vertical
@@ -178,7 +178,13 @@ open class AreaCardActivity: BaseDetailActivity() {
 
         // in below two lines we are setting layout-manager and adapter to our recycler view.
         courseRV.layoutManager = linearLayoutManager
-        courseRV.adapter = courseAdapter
+        courseRV.adapter = courseAdapter as AreaCardAdapter
+
+        wordViewModel.allAreas.observe(this) { words ->
+            // Update the cached copy of the words in the adapter.
+            words.let { courseAdapter.submitList(it) }
+        }
+
 
 //        wordViewModel.allAreas.asFlow().collect {
 //            it.forEach {
@@ -448,7 +454,7 @@ open class AreaCardActivity: BaseDetailActivity() {
             var room = roomIndexList[selRoomIdx-1]
             var index = roomNumberList[selRoomNumberIdx].text
             wordViewModel.insertArea(DtArea(0, room + "_" + index))
-            courseAdapter.notifyDataSetChanged()
+            //courseAdapter.notifyDataSetChanged()
 
             Logger.d("ok")
             picker.hide()
