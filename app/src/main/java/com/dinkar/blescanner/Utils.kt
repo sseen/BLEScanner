@@ -1,7 +1,10 @@
 package com.dinkar.blescanner
 
+import android.content.Context
+import com.google.gson.Gson
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
+import android.content.SharedPreferences
 
 object SSLog {
     fun p(string: String) {
@@ -18,6 +21,7 @@ object Utils {
     val WIFI = "wifi"
     val IBEACON = "iBeacon"
     private val HEX = "0123456789ABCDEF".toCharArray()
+
     fun toHexString(bytes: ByteArray): String {
         if (bytes.isEmpty()) {
             return ""
