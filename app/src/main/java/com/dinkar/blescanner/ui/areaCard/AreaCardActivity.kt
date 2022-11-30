@@ -395,7 +395,8 @@ open class AreaCardActivity: BaseDetailActivity() {
                     myUser.device, one.rssi ?: 0,
                     it.toInt(), myUser.userName,
                     myUser.idStr, datas,
-                    sid, 1
+                    sid, 1,
+                    "${one.major}","${one.minor}"
                 )
             }
             if (dt != null) {

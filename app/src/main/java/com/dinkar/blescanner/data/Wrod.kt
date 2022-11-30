@@ -25,6 +25,9 @@ class DtHistory(
     @ColumnInfo(name = "data") val datas: String,
     @ColumnInfo(name = "BLE/Wifi") val ids: String,
     val type: Int, // 0 beacon 1 wifi
+    val major: String, //
+    val minor: String, //
+    //val userName: String, //
 )
 
 @Entity(tableName = "dt_area_table")
