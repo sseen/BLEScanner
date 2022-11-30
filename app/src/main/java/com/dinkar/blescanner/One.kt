@@ -19,7 +19,7 @@ class One(val isTeacher:Boolean) {
     }
 
     @SuppressLint("Range")
-    public fun exportDatabase(): Boolean {
+    public fun exportDatabase(type: Int): Boolean {
         val df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault())
 
         /**First of all we check if the external storage of the device is available for writing.
@@ -48,7 +48,8 @@ class One(val isTeacher:Boolean) {
                  * containing all records of the table (all fields).
                  * The code of this class is omitted for brevity.
                  */
-                val curGroup = db?.query("select * from dt_history_table group by \"BLE/Wifi\"", null)
+                // beacon
+                val curGroup = db?.query("select * from dt_history_table where type=$type group by \"BLE/Wifi\"", null)
                 if (curGroup != null) {
                     var groupIndex = 1
                     while (curGroup.moveToNext()) {
@@ -57,7 +58,8 @@ class One(val isTeacher:Boolean) {
                         val deviceName = curGroup.getString(curGroup.getColumnIndex("setting_facilities"))
                         val deviceNote = curGroup.getString(curGroup.getColumnIndex("setting_note"))
                         val bleWifi = curGroup.getString(curGroup.getColumnIndex("BLE/Wifi"))
-                        var fileName = "${deviceName}_${name}_${deviceNote}_ble${groupIndex}_$data.csv"
+                        var wifiFolder = if (type == 1) "ble$groupIndex" else "wifi$groupIndex"
+                        var fileName = "${deviceName}_${name}_${deviceNote}_${wifiFolder}_$data.csv"
                         SSLog.p(data +  " " + bleWifi)
                         var typeFolder = if (isTeacher) "teacherData" else "testData"
 
@@ -68,7 +70,7 @@ class One(val isTeacher:Boolean) {
                                     File.separator + "BLEScanner" +
                                     File.separator + name +
                                     File.separator + typeFolder +
-                                    File.separator + "ble$groupIndex"
+                                    File.separator + wifiFolder
                         )
 
                         if (!exportDir.exists()) {
@@ -79,7 +81,7 @@ class One(val isTeacher:Boolean) {
                         file.createNewFile()
                         printWriter = PrintWriter(FileWriter(file))
                         // 保存
-                        val curCSV = db?.query("select * from dt_history_table where \"BLE/Wifi\"='$bleWifi'", null)
+                        val curCSV = db?.query("select * from dt_history_table where \"BLE/Wifi\"='$bleWifi' and type=$type", null)
                         //Write the name of the table and the name of the columns (comma separated values) in the .csv file.
                         printWriter.println("FIRST TABLE OF THE DATABASE")
                         printWriter.println("Time(ms),areaname,dBm,setting_facilities,setting_name," +
@@ -122,7 +124,8 @@ class One(val isTeacher:Boolean) {
                 if (db != null) {
                     //db.close()
                 }
-                mListener("")
+                if (type == 2)
+                    mListener("")
 //                Handler().postDelayed(Runnable {
 //                    //execute the task
 //                    mListener("")

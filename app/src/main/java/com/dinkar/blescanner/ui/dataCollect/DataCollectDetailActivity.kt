@@ -89,7 +89,8 @@ class DataCollectDetailActivity : BaseDetailActivity() {
                 val intent1 = Intent(this, HomeActivity::class.java)
                 startActivity(intent1)
             }
-            dbSave.exportDatabase()
+            dbSave.exportDatabase(1)
+            dbSave.exportDatabase(2)
 
         }
 

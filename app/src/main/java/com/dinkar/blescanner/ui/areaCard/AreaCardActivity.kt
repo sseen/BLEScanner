@@ -292,6 +292,7 @@ open class AreaCardActivity: BaseDetailActivity() {
 
             val scanRecord = result.scanRecord
             val beacon = Beacon(result.device.address)
+            val wifiBeacon = Beacon(result.device.address)
 
             if (ActivityCompat.checkSelfPermission(
                     getContext(),
@@ -350,6 +351,10 @@ open class AreaCardActivity: BaseDetailActivity() {
                     beacon.minor = minor
                     beacon.areaName = courseAdapter.selRoom
 
+                    wifiBeacon.type = Beacon.beaconType.eddystoneUID
+                    wifiBeacon.uuid = wifiInfo.ssid
+                    wifiBeacon.areaName = courseAdapter.selRoom
+
                     val date = Calendar.getInstance().time
                     val dateInString = date.toString("yyyy_MM_dd_HH_mm_ss_SSS")
                     if (!::previousDate.isInitialized) {
@@ -357,12 +362,17 @@ open class AreaCardActivity: BaseDetailActivity() {
                     }
                     beacon.date = date
                     beacon.dateStr = dateInString
+                    wifiBeacon.date = date
+                    wifiBeacon.dateStr = dateInString
 
 //                     if (iBeaconUUID.equals("E2C56DB5DFFB48D2B060D0F5A71096E0"))
                          Log.e("DINKAR", "${beaconSet.contains(beacon)} $dateInString UUID:$iBeaconUUID major:$major minor:$minor RSSI:${result.rssi} wifi:${wifiInfo.rssi}")
 
                     beaconSet.add(beacon)
+                    // beacon
                     beaconList.add(beacon)
+                    // wifi
+                    beaconList.add(wifiBeacon)
 
                     if (beaconList.count() > 20) {
                         saveToDB(beaconList)
@@ -388,6 +398,7 @@ open class AreaCardActivity: BaseDetailActivity() {
             val sid = one.uuid ?: ""
             val datas = one.dateStr ?: ""
             val times = one.date?.time?.minus(previousDate.time)
+            val type = if (one.type == Beacon.beaconType.eddystoneUID) 2 else 1
             previousDate = one.date!!
             val dt = times?.let {
                 DtHistory(
@@ -395,7 +406,7 @@ open class AreaCardActivity: BaseDetailActivity() {
                     myUser.device, one.rssi ?: 0,
                     it.toInt(), myUser.userName,
                     myUser.idStr, datas,
-                    sid, 1,
+                    sid, type,
                     "${one.major}","${one.minor}"
                 )
             }
