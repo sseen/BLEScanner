@@ -29,6 +29,7 @@ class AreaCardAdapter(private val context: Context) :
     private var isLoading = false
     var selIndex = -1
     var isTeacherData = false
+    var selRoom = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // to inflate the layout for each item of recycler view.
@@ -51,6 +52,7 @@ class AreaCardAdapter(private val context: Context) :
                     holder.btReload.isVisible = true
                     selIndex = -1
                 } else {
+                    selRoom = model.areaname
                     holder.bg.setBackgroundColor(ContextCompat.getColor(context,R.color.home_wifi))
                     holder.tvTitle.text = "取得中"
                     isLoading = true

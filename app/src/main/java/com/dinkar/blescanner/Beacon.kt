@@ -19,6 +19,7 @@ class Beacon(mac: String?) {
     var rssi: Int? = null
     var date:Date? = null
     var dateStr:String? = null
+    var areaName:String? = null
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Beacon) return false

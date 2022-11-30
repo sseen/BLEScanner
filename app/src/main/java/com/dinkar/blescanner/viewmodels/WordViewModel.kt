@@ -39,6 +39,10 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
         repository.delArea(areaname)
     }
 
+    fun clearHistory() = viewModelScope.launch {
+        repository.clearHistory()
+    }
+
 }
 
 class WordViewModelFactory(private val repository: WordRepository) : ViewModelProvider.Factory {

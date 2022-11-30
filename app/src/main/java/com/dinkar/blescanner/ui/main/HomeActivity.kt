@@ -54,6 +54,11 @@ class HomeActivity : AppCompatActivity(),View.OnClickListener {
         Logger.d("pause home")
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Logger.d("destroy home")
+    }
+
     override fun onClick(p0: View?) {
 
         when (p0?.id) {

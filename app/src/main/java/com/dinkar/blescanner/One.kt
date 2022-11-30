@@ -2,7 +2,10 @@ package com.dinkar.blescanner
 
 import android.annotation.SuppressLint
 import android.os.Environment
+import androidx.activity.viewModels
 import com.dinkar.blescanner.data.WordRoomDatabase
+import com.dinkar.blescanner.viewmodels.WordViewModel
+import com.dinkar.blescanner.viewmodels.WordViewModelFactory
 import java.io.File
 import java.io.FileWriter
 import java.io.PrintWriter
@@ -10,6 +13,10 @@ import java.text.DateFormat
 import java.util.*
 
 class One {
+    lateinit var mListener:(String)->Unit
+    fun setListener(listener:(String)->Unit) {
+        this.mListener = listener
+    }
 
     @SuppressLint("Range")
     public fun exportDatabase(): Boolean {
@@ -28,7 +35,7 @@ class One {
 //                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             val exportDir = File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).path +
-                        File.separator + "BLE scanner"
+                        File.separator + "BLEScanner"
             )
 
             if (!exportDir.exists()) {
@@ -84,11 +91,13 @@ class One {
                 if (db != null) {
                     db.close()
                 }
+                mListener("")
             } catch (exc: Exception) {
                 //if there are any exceptions, return false
                 return false
             } finally {
                 printWriter?.close()
+
             }
 
             //If there are no errors, return true.

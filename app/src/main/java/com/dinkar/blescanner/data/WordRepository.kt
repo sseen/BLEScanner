@@ -36,6 +36,12 @@ class WordRepository(private val wordDao: WordDao) {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
+    suspend fun clearHistory() {
+        wordDao.deleteHistoryAll()
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
     suspend fun insertArea(area: DtArea) {
         wordDao.insertArea(area)
     }

@@ -110,6 +110,26 @@ open class AreaCardActivity: BaseDetailActivity() {
         private const val PERMISSION_REQUEST_COARSE_LOCATION = 1
     }
 
+    override fun onStart() {
+        super.onStart()
+        Logger.d("start card")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Logger.d("resume card")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Logger.d("pause card")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Logger.d("destroy card")
+    }
+
     private fun setUpBluetoothManager() {
         btManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         btAdapter = btManager!!.adapter
@@ -184,17 +204,6 @@ open class AreaCardActivity: BaseDetailActivity() {
             // Update the cached copy of the words in the adapter.
             words.let { courseAdapter.submitList(it) }
         }
-
-
-//        wordViewModel.allAreas.asFlow().collect {
-//            it.forEach {
-//                val model = CourseModel(it.areaname, 4, 1)
-//                courseModelArrayList.add(model)
-//            }
-//        }
-
-        // wordViewModel.allAreas
-
 
         // bottom buttons control
         idBt_DataCollect_finish.setOnClickListener {
@@ -339,6 +348,7 @@ open class AreaCardActivity: BaseDetailActivity() {
                     beacon.uuid = iBeaconUUID
                     beacon.major = major
                     beacon.minor = minor
+                    beacon.areaName = courseAdapter.selRoom
 
                     val date = Calendar.getInstance().time
                     val dateInString = date.toString("yyyy_MM_dd_HH_mm_ss_SSS")
@@ -381,8 +391,8 @@ open class AreaCardActivity: BaseDetailActivity() {
             previousDate = one.date!!
             val dt = times?.let {
                 DtHistory(
-                    0, myUser.device,
-                    "fc", one.rssi ?: 0,
+                    0, one.areaName ?: "" ,
+                    myUser.device, one.rssi ?: 0,
                     it.toInt(), myUser.userName,
                     myUser.idStr, datas,
                     sid, 1

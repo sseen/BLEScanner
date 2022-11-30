@@ -24,6 +24,9 @@ interface WordDao {
     @Insert
     suspend fun insertBatchAll(users: List<DtHistory>)
 
+    @Query("DELETE FROM dt_history_table")
+    suspend fun deleteHistoryAll()
+
     @Insert
     suspend fun insertArea(area: DtArea)
 
