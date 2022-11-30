@@ -97,7 +97,7 @@ open class AreaCardActivity: BaseDetailActivity() {
 
     private var btManager: BluetoothManager? = null
     private var btAdapter: BluetoothAdapter? = null
-    private var btScanner: BluetoothLeScanner? = null
+    public var btScanner: BluetoothLeScanner? = null
     val eddystoneServiceId: ParcelUuid = ParcelUuid.fromString("0000FEAA-0000-1000-8000-00805F9B34FB")
     var beaconSet: HashSet<Beacon> = HashSet()
     var beaconList: MutableList<Beacon> = mutableListOf()
@@ -130,7 +130,7 @@ open class AreaCardActivity: BaseDetailActivity() {
         Logger.d("destroy card")
     }
 
-    private fun setUpBluetoothManager() {
+    fun setUpBluetoothManager() {
         btManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         btAdapter = btManager!!.adapter
         btScanner = btAdapter?.bluetoothLeScanner
@@ -279,7 +279,7 @@ open class AreaCardActivity: BaseDetailActivity() {
     }
 
 
-    private val leScanCallback: ScanCallback = object : ScanCallback() {
+    public val leScanCallback: ScanCallback = object : ScanCallback() {
         @SuppressLint("SuspiciousIndentation")
         override fun onScanResult(callbackType: Int, result: ScanResult) {
 

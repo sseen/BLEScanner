@@ -58,6 +58,15 @@ class DataCollectDetailActivity : BaseDetailActivity() {
 
         setTitle(R.string.home_bt_data)
 
+        val extra = intent.extras
+        var isTeacher = true
+        if (extra != null) {
+            val type = extra.getString(Utils.kTearcherOrData)
+            if (type == "data") {
+                isTeacher = false
+            }
+        }
+
         val mPrefs =  getSharedPreferences(Utils.share_pre, Context.MODE_PRIVATE)
         val gson = Gson()
         val json = mPrefs.getString(Utils.user, "")
@@ -74,7 +83,7 @@ class DataCollectDetailActivity : BaseDetailActivity() {
             finish()
         }
         idBt_DataCollect_done.setOnClickListener {
-            val dbSave = One()
+            val dbSave = One(isTeacher)
             dbSave.setListener {
                 wordViewModel.clearHistory()
                 val intent1 = Intent(this, HomeActivity::class.java)

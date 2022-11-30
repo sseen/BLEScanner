@@ -12,7 +12,7 @@ import java.text.DateFormat
 import java.util.*
 
 
-class One {
+class One(val isTeacher:Boolean) {
     lateinit var mListener:(String)->Unit
     fun setListener(listener:(String)->Unit) {
         this.mListener = listener
@@ -59,6 +59,7 @@ class One {
                         val bleWifi = curGroup.getString(curGroup.getColumnIndex("BLE/Wifi"))
                         var fileName = "${deviceName}_${name}_${deviceNote}_ble${groupIndex}_$data.csv"
                         SSLog.p(data +  " " + bleWifi)
+                        var typeFolder = if (isTeacher) "teacherData" else "testData"
 
                         // 得到 beacon list
                         // 创建文件名
@@ -66,7 +67,7 @@ class One {
                             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).path +
                                     File.separator + "BLEScanner" +
                                     File.separator + name +
-                                    File.separator + "teacherData" +
+                                    File.separator + typeFolder +
                                     File.separator + "ble$groupIndex"
                         )
 

@@ -15,6 +15,7 @@ object SSLog {
 object Utils {
     val user = "user"
     val share_pre = "PREFERENCE_NAME"
+    val kTearcherOrData = "kTearcherOrData"
 
     val ALL = "all"
     val EDDYSTONE = "addystone"
