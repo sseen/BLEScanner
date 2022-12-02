@@ -252,8 +252,11 @@ open class AreaCardActivity: BaseDetailActivity() {
                     //弹出式菜单的菜单项点击事件
                     popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
                         if (item.itemId == R.id.idItem_delete) {
-                            courseModelArrayList.removeAt(pos)
-                            courseAdapter.notifyItemRemoved(pos)
+                            val currentList = courseAdapter.currentList.toMutableList()
+                            val name = currentList[pos].areaname
+//                            currentList.removeAt(pos)
+//                            courseAdapter.submitList(currentList)
+                            wordViewModel.delArea(name)
                         }
                         false
                     })
