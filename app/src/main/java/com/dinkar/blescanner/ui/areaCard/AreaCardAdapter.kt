@@ -67,6 +67,7 @@ class AreaCardAdapter(private val context: Context) :
             }
 
             if (nowSelIndex == position) {
+                selRoom = model.areaname
                 holder.bg.setBackgroundColor(ContextCompat.getColor(context,R.color.home_wifi))
                 holder.tvTitle.text = "取得中"
                 holder.btReload.isVisible = false
